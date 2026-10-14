@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1.0"
+	>
+	<link
+		rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=zoom_in,zoom_out,two_pager,article,print,progress_activity,chevron_right,keyboard_arrow_down,left_panel_open,left_panel_close"
+	/>
+	<style>
+		.material-symbols-outlined {
+			font-variation-settings:
+				'FILL' 0,
+				'wght' 200,
+				'GRAD' 0,
+				'opsz' 24
+		}
+	</style>
+
+	<link
+		rel="preconnect"
+		href="https://fonts.googleapis.com"
+	>
+	<link
+		rel="preconnect"
+		href="https://fonts.gstatic.com"
+		crossorigin
+	>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+		rel="stylesheet"
+	>
+
+	<style>
+		/* .montserrat {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+
+.cormorant-garamond-<uniquifier> {
+  font-family: "Cormorant Garamond", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+.eb-garamond-<uniquifier> {
+  font-family: "EB Garamond", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+} */
+	</style>
+
+	<title>General Conference Handbook</title>
+</head>
+
+<body>
+
+	<!-- VARS -->
+	<style>
+		:root {
+			--colors-clay-100: rgb(255, 241, 217);
+			--colors-clay-200: rgb(250, 230, 196);
+			--colors-clay-700: rgb(151, 96, 0);
+
+			--colors-slate-800: #222222;
+			--colors-slate-700: #444444;
+		}
+	</style>
+
+
+	<!-- LAYOUT -->
+	<style>
+		.material-symbols-outlined {
+			font-size: 1.6em;
+		}
+
+		body {
+			margin: 0;
+			font-family: sans-serif;
+			background: var(--colors-clay-100);
+			color: var(--colors-slate-800);
+		}
+
+		/* LAYOUT */
+		.layout {
+			display: flex;
+			height: 100vh;
+			overflow: hidden;
+
+			opacity: 0;
+		}
+
+		.layout.init {
+			opacity: 1;
+		}
+
+		.controls {
+			--controls-padding: 1rem;
+
+			display: flex;
+			flex-direction: column;
+			width: 20rem;
+			flex-shrink: 0;
+			height: 100vh;
+			overflow: hidden;
+		}
+		.controls:not(.menuOpen) {
+			width: min-content;
+		}
+
+		.flex-scroll {
+			flex-grow: 1;
+			overflow-y: auto;
+			padding: var(--controls-padding);
+		}
+
+		.controls:not(.menuOpen) .flex-scroll {
+			display: none;
+		}
+
+		.view-settings {
+			padding: var(--controls-padding);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.controls:not(.menuOpen) .view-settings {
+			flex-direction: column;
+		}
+
+		.bottom-controls {
+			padding: var(--controls-padding);
+		}
+
+
+		.left-side {
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+			height: 100vh;
+			overflow: hidden;
+		}
+
+		.pages-wrapper {
+			overflow: auto;
+			flex: 1;
+			padding: 1rem;
+			box-sizing: border-box;
+		}
+	</style>
+
+	<!-- UI -->
+	<style>
+		/* BUTTONS */
+		.btn {
+			--bg-color: transparent;
+			--bg-color-active: var(--colors-clay-100);
+			--bg-color-hover: var(--colors-clay-200);
+
+			--color: var(--colors-slate-800);
+			--color-hover: var(--colors-clay-700);
+			--color-active: var(--colors-clay-700);
+
+			--shadow: none;
+			--shadow-hover: 0 0 0.1rem #0003;
+			--shadow-active: 0 0 0.1rem #0003;
+
+			color: var(--color);
+			background: var(--bg-color);
+			box-shadow: var(--shadow);
+
+			padding: 0.5em 0.8em;
+			cursor: pointer;
+			user-select: none;
+			border-radius: 0.5rem;
+		
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.5em;
+		}
+
+		.btn.active,
+		.btn:active,
+		.btn[active="true"] {
+			background: var(--bg-color-active);
+			color: var(--color-active);
+			box-shadow: var(--shadow-active);
+		}
+
+		.btn:hover {
+			background: var(--bg-color-hover);
+			color: var(--color-hover);
+			box-shadow: var(--shadow-hover);
+		}
+
+		.btn-group {
+			display: flex;
+		}
+
+		.btn-group .btn {
+			border-radius: 0;
+		}
+
+		.btn-group .btn:first-child {
+			border-radius: 0.5em 0 0 0.5em;
+		}
+
+		.btn-group .btn:last-child {
+			border-radius: 0 0.5em 0.5em 0;
+		}
+
+		.spin {
+			display: inline-block;
+			animation: spin 1s linear infinite;
+		}
+
+		@keyframes spin {
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+
+		/* DETAILS */
+		details>summary:first-of-type {
+			display: flex;
+			justify-content: space-between;
+			padding: 1em;
+			color: var(--colors-slate-700)
+		}
+
+		details>summary:first-of-type:hover,
+		details[open] > summary:first-of-type {
+			color: var(--colors-clay-700)
+		}
+
+		details[open] {
+			background-color: var(--colors-clay-100);
+		}
+
+		details>summary:first-of-type::after {
+			display: block;
+			content: "chevron_right";
+			font-family: "Material Symbols Outlined";
+			transition: transform 200ms;
+		}
+
+		details[open]>summary:first-of-type::after {
+			transform: rotate(90deg)
+		}
+
+		details>div {
+			padding: 1em;
+		}
+	</style>
+
+	<!-- PAGES -->
+	<style>
+		/* PREVIEW */
+
+		#source {
+			position: fixed;
+			translate: 100vw;
+			user-select: none;
+			opacity: 0;
+			min-height: 100vh;
+			outline: none;
+		}
+
+		#pages-insert {
+			font-family: "EB Garamond", serif;
+			font-size: 14pt;
+		}
+
+		.pagedjs_page {
+			background: white;
+			box-shadow: 0 2px 8px #0002;
+			margin: 16px auto;
+		}
+
+
+		.talk-page {
+			page: talks;
+			width: calc(100% - 50mm);
+		}
+
+		/* NOTE MARGINS */
+		.pagedjs_page:nth-of-type(even) .pagedjs_pagebox.contains-talk .talk-page {
+			margin-left: 50mm;
+		}
+
+		.pagedjs_page:nth-of-type(odd) .pagedjs_pagebox.contains-talk {}
+
+		/* .pagedjs_pagebox .pageNumber {
+			position: absolute;
+			bottom: calc(var(--pagedjs-margin-bottom) - 15pt);
+			left: 50%;
+			translate: -50%;
+		} */
+
+		/* PRINT PREVIEW */
+		.book-view-modifier.bookView {
+			zoom: 0.5;
+		}
+
+		.bookView .pagedjs_pages {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.bookView .pagedjs_pages::before {
+			content: '';
+		}
+
+
+		/* TABLE OF CONTENTS */
+		.toc-list {
+			display: flex;
+			flex-direction: column;
+			gap: 2pt;
+		}
+
+		.toc-item {
+			display: flex;
+			gap: 10pt;
+		}
+
+		.toc-spacer {
+			flex-grow: 1;
+			border-bottom: 1pt dotted #888;
+		}
+
+		.talk-columns {
+			/* columns: 2; */
+			column-gap: 0.35in;
+		}
+
+		/* NUMBERED PARAGRAPHS */
+
+		.talk-paragraph {
+			position: relative;
+			text-align: justify;
+		}
+
+		.talk-paragraph::before {
+			content: attr(data-marker);
+			position: absolute;
+			top: 0;
+			left: 0;
+			padding-right: 0.5rem;
+			translate: -100%;
+			opacity: .5;
+			transform: scale(0.8);
+		}
+
+		/* RICH TEXT NODES */
+
+		.p-text-node .I {
+			font-style: italic;
+		}
+
+		.p-text-node .EM {
+			font-style: italic;
+		}
+
+		.p-text-node .CITE {
+			font-style: italic;
+		}
+
+		.p-text-node .STRONG {
+			font-weight: bold;
+		}
+
+
+		/* DOC ELEMENT STYLES */
+		.doc-talkTitle {
+			font-family: "Montserrat", sans-serif;
+			font-size: 17pt;
+			font-weight: 500;
+			color: #222222;
+			line-height: 1.2;
+			text-align: left;
+		}
+
+		.doc-talkAuthor {
+			display: inline-block;
+			font-family: "Cormorant Garamond", serif;
+			font-size: 11pt;
+			font-weight: 400;
+			color: #222222;
+			line-height: 1.2;
+			text-align: left;
+			margin-top: 5pt;
+			margin-bottom: 15pt;
+			text-transform: uppercase;
+		}
+
+		.doc-talkAuthorRole {
+			margin-left: 5pt;
+			display: inline-block;
+			font-family: inherit;
+			font-size: 11pt;
+			font-weight: 400;
+			font-style: normal;
+			color: #222222;
+			line-height: 1.2;
+			text-align: left;
+			margin-bottom: 15pt;
+		}
+
+		.doc-talkKicker {
+			font-family: "Cormorant Garamond", serif;
+			font-size: 12pt;
+			font-weight: 200;
+			font-style: italic;
+			color: #222222;
+			line-height: 1.2;
+			text-align: left;
+			margin-bottom: 15pt;
+			border-top: 1pt solid #888;
+			border-bottom: 1pt solid #888;
+			padding: 8pt 0;
+		}
+
+		.doc-H2 {
+			font-family: "Montserrat", sans-serif;
+			font-size: 12pt;
+			font-weight: 500;
+			color: #222222;
+			line-height: 1.2;
+			text-align: left;
+			margin-bottom: 10pt;
+			margin-top: 0pt;
+		}
+
+		.doc-H3 {
+			font-family: "Montserrat", sans-serif;
+			font-size: 13pt;
+			font-weight: 500;
+			color: #222222;
+			line-height: 1.2;
+			text-align: left;
+			margin-bottom: 10pt;
+			margin-top: 0pt;
+		}
+
+		.doc-paragraph {
+			font-family: inherit;
+			font-size: inherit;
+			font-weight: 400;
+			color: #222222;
+			line-height: 1.2;
+			text-align: justify;
+			margin-bottom: 10pt;
+			margin-top: 0pt;
+		}
+
+		.doc-poetry {
+			margin: 0 20pt 10pt 20pt;
+		}
+
+		.doc-ul,
+		.doc-ol {
+			margin-right: 20pt;
+		}
+
+		.doc-ul li,
+		.doc-ol li {
+			margin: 10pt 0;
+		}
+
+		.footnotes {
+			margin-top: 20pt;
+		}
+
+		.footnotes ol {
+			margin: 0;
+			margin-top: 10pt;
+		}
+
+		.footnotes li {
+			margin: 5pt 0;
+			font-size: 12pt;
+		}
+
+
+		/* PRINTING */
+		@media print {
+
+			/* Make sure we scroll */
+			body,
+			.layout,
+			.left-side,
+			.pages-wrapper {
+				overflow: visible !important;
+			}
+
+			/* Hide everything not within the preview */
+			#source,
+			.view-settings,
+			.controls {
+				display: none !important;
+			}
+
+			/* Show only the rendered Paged.js pages */
+			#pages-insert {
+				zoom: 1 !important;
+				margin: 0 !important;
+				padding: 0 !important;
+			}
+
+			/* Avoid layout styling from the on-screen preview */
+			.pages-wrapper,
+			.book-view-modifier {
+				display: block !important;
+				width: auto !important;
+				margin: 0 !important;
+				overflow: visible !important;
+				padding: 0;
+			}
+
+			/* Each Paged.js page should print as one sheet */
+			.pagedjs_page {
+				display: block !important;
+				margin: 0 !important;
+				box-shadow: none !important;
+				break-after: page;
+				page-break-after: always;
+			}
+
+			.pagedjs_page:last-child {
+				break-after: auto;
+				page-break-after: auto;
+			}
+		}
+	</style>
+
+	<div id="app">
+
+		<div class="layout" :class="{init}">
+
+			<div class="controls" :class="{menuOpen}">
+				<div class="view-settings">
+
+					<!-- view -->
+					<div
+						class="btn"
+						@click="bookView = false"
+						:active="bookView === false"
+					>
+						<i class="material-symbols-outlined">article</i>
+					</div>
+					<div
+						class="btn"
+						@click="bookView = true"
+						:active="bookView === true"
+					>
+						<i class="material-symbols-outlined">two_pager</i>
+					</div>
+
+
+					<!-- zoom -->
+					<div
+						class="btn"
+						@click="zoom *= 0.75"
+					>
+						<i class="material-symbols-outlined">zoom_out</i>
+					</div>
+					<div
+						class="btn"
+						@click="zoom *= 1.25"
+					>
+						<i class="material-symbols-outlined">zoom_in</i>
+					</div>
+
+					<div style="flex-grow: 1"></div>
+
+					<!-- print -->
+					<div
+						class="btn"
+						@click="print"
+					>
+						<i
+							v-if="!rendering"
+							class="material-symbols-outlined"
+						>print</i>
+						<i
+							v-else
+							class="material-symbols-outlined spin"
+						>progress_activity</i>
+					</div>
+
+
+				</div>
+
+				<div class="flex-scroll">
+
+
+					<details>
+						<summary>Content</summary>
+						<div>
+							October
+						</div>
+					</details>
+
+
+					<details>
+						<summary>Font and Styles</summary>
+						<div>
+							<inline-text-style
+								label="Talk Title"
+								v-model:config="styles.talkTitle"
+							></inline-text-style>
+
+							<inline-text-style
+								label="Speaker"
+								v-model:config="styles.talkAuthor"
+							></inline-text-style>
+
+							<inline-text-style
+								label="Speaker Role"
+								v-model:config="styles.talkAuthorRole"
+							></inline-text-style>
+
+							<inline-text-style
+								label="Talk Summary"
+								v-model:config="styles.talkKicker"
+							></inline-text-style>
+
+
+							<inline-text-style
+								label="Section headers"
+								v-model:config="styles.H2"
+							></inline-text-style>
+							<inline-text-style
+								label="Subsection headers"
+								v-model:config="styles.H3"
+							></inline-text-style>
+							<inline-text-style
+								label="Body text"
+								v-model:config="styles.paragraph"
+							></inline-text-style>
+						</div>
+					</details>
+
+				</div>
+
+				<div style="flex-grow: 1"></div>
+
+				<div class="bottom-controls">
+					<div class="btn" style="justify-content: start;" @click="menuOpen = !menuOpen">
+						<template v-if="menuOpen">
+							<i class="material-symbols-outlined">left_panel_close</i>
+							Hide
+						</template>
+						<template v-else>
+							<i class="material-symbols-outlined">left_panel_open</i>
+						</template>
+					</div>
+				</div>
+
+			</div>
+
+			<div id="source">
+				<div
+					class="front-matter"
+					style="font-family: Montserrat, sans-serif"
+				>
+					<!-- TITLE PAGE -->
+					<div class="page-break">
+						<hr />
+						<div style="font-weight: bold; font-size: 18pt; margin-bottom: 10pt; text-align: right;">
+							Personal Study Notebook
+						</div>
+
+						<div style="font-weight: bold; font-size: 24pt; margin-bottom: 10pt; margin-top: 520pt">
+							October 2026
+						</div>
+						<div style="font-weight: bold; font-size: 48pt; margin-bottom: 10pt;">
+							General Conference
+						</div>
+						<hr />
+					</div>
+
+					<!-- blank for back of title page -->
+					<!-- <div class="page-break"></div> -->
+
+					<!-- TABLE OF CONTENTS -->
+					<div class="page-break">
+						<div
+							style="font-weight: bold; font-size: 20pt; margin-bottom: 20pt; border-bottom: 1px solid; padding-bottom: 10pt">
+							Table of Contents
+						</div>
+						<div id="tableOfContents">
+							<div
+								v-for="talk in talks"
+								style="display: flex; align-items: start; gap: 10pt; margin-bottom: 20pt; font-size: 11pt;"
+							>
+								<div>
+									<div style="aspect-ratio: 1; width: 14pt; background: #ddd; margin-top: 0t;"></div>
+								</div>
+								<div style="flex-grow: 1">{{talk.title}}</div>
+								<div style="flex-shrink: 0; width: 160pt">{{talk.author}}</div>
+								<div
+									:id="'pageNumber_'+talk.id"
+									style="flex-shrink: 0; width: 20pt; text-align: right;"
+								>--</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- TALKS -->
+				<div class="talks-wrapper">
+					<div id="startTalks"></div>
+
+					<div
+						class="page-break talk-page"
+						v-for="talk in talks"
+					>
+						<div
+							class="talk-starter"
+							:id="talk.id"
+						></div>
+						<div class="doc-talkTitle">{{talk.title}}</div>
+						<div class="doc-talkAuthor">By {{talk.author}}</div>
+						<!-- <div class="doc-talkAuthorRole">{{talk.authorRole}}</div> -->
+
+						<div class="doc-talkKicker">{{talk.kicker}}</div>
+
+						<div class="talk-columns">
+							<div class="talkBody">
+								<div
+									v-for="section, i in talk.bodySections"
+									:class="['body-section', 'doc-'+section.type]"
+								>
+									<!-- <small><small>{{section.type}}</small></small> -->
+									<div
+										v-if="section.type === 'section-header'"
+										:class="'doc-'+section.level"
+									><rich-text-nodes :nodes="section.nodes" /></div>
+
+									<div
+										v-if="section.type === 'paragraph'"
+										class="talk-paragraph"
+										:data-marker="section.paragraphNumber"
+									><rich-text-nodes :nodes="section.nodes" /></div>
+
+									<!-- <div v-if="section.type === 'image'">
+										<img :src="section.src"/>
+										<rich-text-nodes v-if="section.credit" :nodes="section.credit.nodes" />
+									</div> -->
+
+									<ol v-if="section.type === 'ol'">
+										<li v-for="item in section.items"><rich-text-nodes :nodes="item.nodes" /></li>
+									</ol>
+
+									<ul v-if="section.type === 'ul'">
+										<li v-for="item in section.items"><rich-text-nodes :nodes="item.nodes" /></li>
+									</ul>
+
+									<div v-if="section.type === 'poetry'">
+										<div
+											class="stanza"
+											v-for="stanza in section.stanzas"
+										>
+											<div
+												class="line"
+												v-for="line in stanza"
+											>
+												<rich-text-nodes :nodes="line.nodes" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div
+								class="footnotes"
+								v-if="talk.notes.length"
+							>
+								<div>References</div>
+								<ol>
+									<li v-for="note in talk.notes">{{note.text}}</li>
+								</ol>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="left-side">
+				<!-- <div class="view-settings">
+					<div class="btn-group">
+						<div
+							class="btn"
+							@click="zoom *= 0.75"
+						>
+							<i class="material-symbols-outlined">zoom_out</i>
+						</div>
+						<div
+							class="btn"
+							@click="zoom *= 1.25"
+						>
+							<i class="material-symbols-outlined">zoom_in</i>
+						</div>
+					</div>
+
+					<div class="btn-group">
+						<div
+							class="btn"
+							@click="bookView = false"
+							:active="bookView === false"
+						>
+							<i class="material-symbols-outlined">article</i>
+						</div>
+						<div
+							class="btn"
+							@click="bookView = true"
+							:active="bookView === true"
+						>
+							<i class="material-symbols-outlined">two_pager</i>
+						</div>
+					</div>
+
+					<div
+						class="btn"
+						@click="print"
+					>
+						<i
+							v-if="!rendering"
+							class="material-symbols-outlined"
+						>print</i>
+						<i
+							v-else
+							class="material-symbols-outlined spin"
+						>progress_activity</i>
+					</div>
+				</div> -->
+				<div class="pages-wrapper">
+					<div style="width: min-content; margin: 0 auto;">
+						<div
+							class="book-view-modifier"
+							:class="{ bookView }"
+						>
+							<div
+								id="pages-insert"
+								:style="{ zoom, opacity: rendering ? 0.5 : 1 }"
+							></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<style id="generated-text-css"></style>
+
+	<script>
+		window.PagedConfig = { auto: false };
+	</script>
+	<script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+
+	<script src="conference-talks.js"></script>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script>
+		const { createApp, nextTick, defineComponent, computed, onMounted } = Vue;
+	</script>
+
+	<script src="FontInput.js"></script>
+	<script src="InlineTextStyle.js"></script>
+	<script src="RichTextNodes.js"></script>
+
+
+	<script>
+		// before rendering, do some talk processing
+		for (const talk of talks) {
+			// assign talk ID
+			talk.id = `${talk.author}${talk.title}`.toLowerCase().split(/[^a-z]/g).join('');
+			// number paragraphs
+			let count = 0;
+			for (const section of talk.bodySections) {
+				if (section.type === 'paragraph') {
+					count++;
+					section.paragraphNumber = count;
+				}
+			}
+		}
+
+		createApp({
+			components: { InlineTextStyle, RichTextNodes },
+
+			data() {
+				return {
+					talks,
+					zoom: 1,
+					bookView: false,
+					rendering: false,
+					init: false,
+					menuOpen: true,
+					// fontFamily: "Arial",
+					// fontSize: 12,
+					// pageMargin: "1in",
+					// renderId: 0,
+					styles: {
+						// talkTitle: {
+						// 	fontFamily: "Georgia",
+						// 	fontSize: 24,
+						// 	fontWeight: 700,
+						// 	color: "#222222",
+						// 	lineHeight: 1.2,
+						// 	textAlign: "left",
+						// },
+						// talkAuthor: {
+						// 	fontFamily: "Georgia",
+						// 	fontSize: 14,
+						// 	fontWeight: 700,
+						// 	color: "#222222",
+						// 	lineHeight: 1.2,
+						// 	textAlign: "left",
+						// },
+						// talkAuthorRole: {
+						// 	fontFamily: "Georgia",
+						// 	fontSize: 14,
+						// 	fontWeight: 700,
+						// 	fontStyle: 'italic',
+						// 	color: "#222222",
+						// 	lineHeight: 1.2,
+						// 	textAlign: "left",
+						// },
+						// talkKicker: {
+						// 	fontFamily: "Roboto",
+						// 	fontSize: 12,
+						// 	fontWeight: 400,
+						// 	color: "#222222",
+						// 	lineHeight: 1.5,
+						// 	textAlign: "justify",
+						// },
+						// H2: {
+						// 	fontFamily: "serif",
+						// 	fontSize: 16,
+						// 	fontWeight: 700,
+						// 	color: "#222222",
+						// 	lineHeight: 1.5,
+						// 	textAlign: "justify",
+						// 	marginTop: 5,
+						// 	marginBottom: 1,
+						// },
+						// H3: {
+						// 	fontFamily: "serif",
+						// 	fontSize: 12,
+						// 	fontWeight: 500,
+						// 	color: "#222222",
+						// 	lineHeight: 1.5,
+						// 	textAlign: "justify",
+						// 	marginTop: 5,
+						// 	marginBottom: 1,
+						// },
+						// paragraph: {
+						// 	fontFamily: "serif",
+						// 	fontSize: 12,
+						// 	fontWeight: 400,
+						// 	color: "#222222",
+						// 	lineHeight: 1.5,
+						// 	textAlign: "justify",
+						// 	marginTop: 5,
+						// 	marginBottom: 1,
+						// },
+					},
+				};
+			},
+			watch: {
+				styles: {
+					deep: true,
+					handler() {
+						this.renderPreview();
+					},
+				},
+			},
+
+			mounted() {
+				this.renderPreview();
+				window.addEventListener('keydown', (event) => {
+					if (event.key === 'p') {
+						event.preventDefault();
+						this.print();
+					}
+				});
+				this.init = true;
+			},
+
+			methods: {
+				updatePreviewStyles() {
+					const css = Object.entries(this.styles)
+						.map(([name, config]) => {
+							// Map config keys to CSS class names:
+							// talkTitle -> .doc-talkTitle, body -> .doc-body
+							const className = `doc-${name}`;
+
+							return `
+          #pages-insert .${className} {
+            font-family: ${JSON.stringify(config.fontFamily)};
+            font-size: ${Number(config.fontSize)}pt;
+            font-weight: ${Number(config.fontWeight)};
+            font-style: ${config.fontStyle};
+            color: ${config.color};
+            line-height: ${Number(config.lineHeight)};
+            text-align: ${config.textAlign};
+            margin-top: ${Number(config.marginTop)};
+            margin-bottom: ${Number(config.marginBottom)};
+          }
+        `;
+						})
+						.join("\n");
+
+					document.querySelector("#generated-text-css").textContent = css;
+				},
+
+				async renderPreview() {
+					this.rendering = true;
+					await this.$nextTick();
+					this.updatePreviewStyles();
+
+					const pagesInsertEl = document.getElementById("pages-insert");
+
+					await renderPagedJsPages(pagesInsertEl);
+
+					// compute page numbers!
+					const renderedPages = [...pagesInsertEl.querySelectorAll(".pagedjs_pagebox")];
+
+					let hasStartedTalks = false;
+					let talksStartIdx = 0;
+					const pageNumbers = {};
+
+					for (const i in renderedPages) {
+						const idx = Number(i);
+						const pageEl = renderedPages[idx];
+						if (!hasStartedTalks) {
+							hasStartedTalks = Boolean(pageEl.querySelector("#startTalks"));
+							if (hasStartedTalks) {
+								talksStartIdx = idx;
+							}
+						}
+						if (hasStartedTalks) {
+							// mark as talks portion of doc
+							pageEl.classList.add('contains-talk');
+
+							//compute page number from talks start
+							const pageNumber = idx + 1;
+							// const numberEl = document.createElement('div');
+							// numberEl.className = 'pageNumber';
+							// numberEl.textContent = pageNumber;
+
+							// pageEl.appendChild(numberEl);
+
+							// assign page number to talk
+							const talkStart = pageEl.querySelector('.talk-starter');
+							if (talkStart) {
+								const id = talkStart.id;
+								// pageNumbers[id] = pageNumber;
+								const tocEl = pagesInsertEl.querySelector('#pageNumber_' + id);
+								tocEl.textContent = pageNumber;
+							}
+						}
+					}
+
+
+					// // insert table of contents!
+					// const toc = document.querySelector(".pagedjs_area #tableOfContents");
+
+					// const list = document.createElement("div");
+					// list.className = 'toc-list';
+
+					// // for (const talk of this.talks) {
+					// // 	const item = document.createElement("div");
+					// // 	item.className = 'toc-item';
+
+					// // 	const title = document.createElement("a");
+					// // 	// link.href = `#${talk.id}`;
+					// // 	title.textContent = talk.title;
+
+					// // 	const author = document.createElement("a");
+					// // 	author.textContent = talk.author;
+
+					// // 	// const spacer = document.createElement("div");
+					// // 	// spacer.className = 'toc-spacer';
+
+					// // 	const pageNumber = pageNumbers[talk.id];
+					// // 	item.append(title, author, document.createTextNode(pageNumber || ''));
+					// // 	list.append(item);
+					// // }
+
+					// toc.replaceChildren(list);
+
+					this.rendering = false;
+				},
+
+				print() {
+					if (this.rendering) {
+						alert("Cannot print while rendering pages!");
+						return;
+					}
+					window.print();
+				}
+			},
+		}).mount("#app");
+
+		async function renderPagedJsPages(targetEl) {
+			try {
+				const source = document.querySelector("#source");
+
+				targetEl.replaceChildren();
+				await window.PagedPolyfill.preview(source.innerHTML, ["./pages.css"], targetEl);
+
+			} catch (error) {
+				console.error("Paged.js preview failed:", error);
+			}
+		}
+
+	</script>
+
+
+
+	<style>
+		.text-style-control {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: end;
+			gap: 12px;
+			padding: 12px;
+			border: 1px solid #ccc;
+		}
+
+		.text-style-control label {
+			display: grid;
+			gap: 4px;
+		}
+
+		.text-style-control input,
+		.text-style-control select {
+			max-width: 180px;
+		}
+	</style>
+</body>
+
+</html>

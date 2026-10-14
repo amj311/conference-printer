@@ -1,0 +1,34 @@
+@page {
+  size: Letter;
+  margin: 0.75in;
+  /* top/bottom, left/right */
+}
+
+@page front {
+  @bottom-center {
+    content: none;
+    /* hide page numbers on front matter */
+  }
+}
+
+@page body {
+  @bottom-center {
+    content: counter(page);
+  }
+}
+
+.front-matter {
+  page: front;
+}
+
+.talks-wrapper {
+  page: body;
+}
+
+#startTalks {
+  /* counter-reset: page 1; */
+}
+
+.page-break {
+  break-after: page;
+}
