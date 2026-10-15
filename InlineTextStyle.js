@@ -19,7 +19,6 @@ const InlineTextStyle = {
 
   data() {
     return {
-      fontOptions: ["Arial", "Georgia", "Times New Roman", "Verdana"],
     };
   },
 
@@ -32,13 +31,13 @@ const InlineTextStyle = {
     },
   },
 
-  template: `
+  template: /*html*/`
     <fieldset class="text-style-control">
       <legend>{{ label }}</legend>
 
       <label>
         Font
-        <font-input></font-input>
+        <font-input v-model="config.fontFamily"></font-input>
       </label>
 
       <label>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="silk">
 
 <head>
 	<meta charset="UTF-8">
@@ -9,13 +9,13 @@
 	>
 	<link
 		rel="stylesheet"
-		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=zoom_in,zoom_out,two_pager,article,print,progress_activity,chevron_right,keyboard_arrow_down,left_panel_open,left_panel_close"
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=zoom_in,zoom_out,two_pager,article,print,progress_activity,chevron_right,keyboard_arrow_down,left_panel_open,left_panel_close,warning"
 	/>
 	<style>
 		.material-symbols-outlined {
 			font-variation-settings:
 				'FILL' 0,
-				'wght' 200,
+				'wght' 300,
 				'GRAD' 0,
 				'opsz' 24
 		}
@@ -34,31 +34,14 @@
 		href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
 		rel="stylesheet"
 	>
+	<link
+		href="pages.css"
+		rel="stylesheet"
+	>
 
-	<style>
-		/* .montserrat {
-  font-family: "Montserrat", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-}
-
-
-.cormorant-garamond-<uniquifier> {
-  font-family: "Cormorant Garamond", serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-}
-
-.eb-garamond-<uniquifier> {
-  font-family: "EB Garamond", serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-} */
-	</style>
-
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
 	<title>General Conference Handbook</title>
 </head>
 
@@ -67,12 +50,18 @@
 	<!-- VARS -->
 	<style>
 		:root {
-			--colors-clay-100: rgb(255, 241, 217);
+			--colors-clay-100: rgb(255, 246, 230);
 			--colors-clay-200: rgb(250, 230, 196);
-			--colors-clay-700: rgb(151, 96, 0);
+			--colors-clay-700: rgb(143, 81, 0);
 
 			--colors-slate-800: #222222;
 			--colors-slate-700: #444444;
+			--colors-slate-200: #e3e2e2;
+			--colors-slate-100: #fefefe;
+
+			--shadow-1: 0 0.1rem 0.3rem #0002;
+
+			font-size: 15px;
 		}
 	</style>
 
@@ -86,8 +75,8 @@
 		body {
 			margin: 0;
 			font-family: sans-serif;
-			background: var(--colors-clay-100);
-			color: var(--colors-slate-800);
+			/* background: var(--colors-slate-200);
+			color: var(--colors-slate-800); */
 		}
 
 		/* LAYOUT */
@@ -121,6 +110,10 @@
 			flex-grow: 1;
 			overflow-y: auto;
 			padding: var(--controls-padding);
+
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
 		}
 
 		.controls:not(.menuOpen) .flex-scroll {
@@ -141,7 +134,6 @@
 			padding: var(--controls-padding);
 		}
 
-
 		.left-side {
 			flex-grow: 1;
 			display: flex;
@@ -161,18 +153,19 @@
 	<!-- UI -->
 	<style>
 		/* BUTTONS */
-		.btn {
+		.my-btn {
 			--bg-color: transparent;
-			--bg-color-active: var(--colors-clay-100);
-			--bg-color-hover: var(--colors-clay-200);
+			--bg-color-active: var(--colors-slate-100);
+			--bg-color-hover: var(--colors-clay-100);
+			--bg-border-color: transparent;
 
 			--color: var(--colors-slate-800);
 			--color-hover: var(--colors-clay-700);
 			--color-active: var(--colors-clay-700);
 
 			--shadow: none;
-			--shadow-hover: 0 0 0.1rem #0003;
-			--shadow-active: 0 0 0.1rem #0003;
+			--shadow-hover: var(--shadow-1);
+			--shadow-active: var(--shadow-1);
 
 			color: var(--color);
 			background: var(--bg-color);
@@ -189,33 +182,33 @@
 			gap: 0.5em;
 		}
 
-		.btn.active,
-		.btn:active,
-		.btn[active="true"] {
+		.my-btn.active,
+		.my-btn:active,
+		.my-btn[active="true"] {
 			background: var(--bg-color-active);
 			color: var(--color-active);
 			box-shadow: var(--shadow-active);
 		}
 
-		.btn:hover {
+		.my-btn:hover {
 			background: var(--bg-color-hover);
 			color: var(--color-hover);
 			box-shadow: var(--shadow-hover);
 		}
 
-		.btn-group {
+		.my-btn-group {
 			display: flex;
 		}
 
-		.btn-group .btn {
+		.my-btn-group .my-btn {
 			border-radius: 0;
 		}
 
-		.btn-group .btn:first-child {
+		.my-btn-group .my-btn:first-child {
 			border-radius: 0.5em 0 0 0.5em;
 		}
 
-		.btn-group .btn:last-child {
+		.my-btn-group .my-btn:last-child {
 			border-radius: 0 0.5em 0.5em 0;
 		}
 
@@ -232,35 +225,42 @@
 
 
 		/* DETAILS */
-		details>summary:first-of-type {
+		details > summary:first-of-type {
 			display: flex;
 			justify-content: space-between;
 			padding: 1em;
-			color: var(--colors-slate-700)
+			color: var(--colors-slate-700);
+			cursor: pointer;
+			user-select: none;
 		}
 
-		details>summary:first-of-type:hover,
+		details>summary:first-of-type:hover {
+			color: var(--colors-clay-700);
+		}
+
 		details[open] > summary:first-of-type {
-			color: var(--colors-clay-700)
+			color: var(--colors-clay-700);
 		}
 
 		details[open] {
-			background-color: var(--colors-clay-100);
+			background-color: var(--colors-slate-100);
+			border-radius: 0.5rem;
+			box-shadow: var(--shadow-1);
 		}
 
-		details>summary:first-of-type::after {
+		details > summary:first-of-type::after {
 			display: block;
 			content: "chevron_right";
 			font-family: "Material Symbols Outlined";
 			transition: transform 200ms;
 		}
 
-		details[open]>summary:first-of-type::after {
+		details[open] > summary:first-of-type::after {
 			transform: rotate(90deg)
 		}
 
-		details>div {
-			padding: 1em;
+		details > div {
+			padding: 0 1em 1em 1em;
 		}
 	</style>
 
@@ -383,14 +383,14 @@
 
 
 		/* DOC ELEMENT STYLES */
-		.doc-talkTitle {
+		/* .doc-talkTitle {
 			font-family: "Montserrat", sans-serif;
 			font-size: 17pt;
 			font-weight: 500;
 			color: #222222;
 			line-height: 1.2;
 			text-align: left;
-		}
+		} */
 
 		.doc-talkAuthor {
 			display: inline-block;
@@ -554,14 +554,14 @@
 
 					<!-- view -->
 					<div
-						class="btn"
+						class="my-btn my-btn-soft my-btn-active"
 						@click="bookView = false"
 						:active="bookView === false"
 					>
 						<i class="material-symbols-outlined">article</i>
 					</div>
 					<div
-						class="btn"
+						class="my-btn my-btn-ghost"
 						@click="bookView = true"
 						:active="bookView === true"
 					>
@@ -571,13 +571,13 @@
 
 					<!-- zoom -->
 					<div
-						class="btn"
+						class="my-btn my-btn-ghost"
 						@click="zoom *= 0.75"
 					>
 						<i class="material-symbols-outlined">zoom_out</i>
 					</div>
 					<div
-						class="btn"
+						class="my-btn my-btn-ghost"
 						@click="zoom *= 1.25"
 					>
 						<i class="material-symbols-outlined">zoom_in</i>
@@ -587,7 +587,7 @@
 
 					<!-- print -->
 					<div
-						class="btn"
+						class="my-btn my-btn-ghost"
 						@click="print"
 					>
 						<i
@@ -615,40 +615,12 @@
 
 
 					<details>
-						<summary>Font and Styles</summary>
+						<summary>Talk Styles</summary>
 						<div>
 							<inline-text-style
-								label="Talk Title"
-								v-model:config="styles.talkTitle"
-							></inline-text-style>
-
-							<inline-text-style
-								label="Speaker"
-								v-model:config="styles.talkAuthor"
-							></inline-text-style>
-
-							<inline-text-style
-								label="Speaker Role"
-								v-model:config="styles.talkAuthorRole"
-							></inline-text-style>
-
-							<inline-text-style
-								label="Talk Summary"
-								v-model:config="styles.talkKicker"
-							></inline-text-style>
-
-
-							<inline-text-style
-								label="Section headers"
-								v-model:config="styles.H2"
-							></inline-text-style>
-							<inline-text-style
-								label="Subsection headers"
-								v-model:config="styles.H3"
-							></inline-text-style>
-							<inline-text-style
-								label="Body text"
-								v-model:config="styles.paragraph"
+								v-for="style in styles.talkStyles"
+								:label="style.label"
+								v-model:config="style.style"
 							></inline-text-style>
 						</div>
 					</details>
@@ -658,7 +630,7 @@
 				<div style="flex-grow: 1"></div>
 
 				<div class="bottom-controls">
-					<div class="btn" style="justify-content: start;" @click="menuOpen = !menuOpen">
+					<div class="my-btn my-btn-ghost" style="justify-content: start;" @click="menuOpen = !menuOpen">
 						<template v-if="menuOpen">
 							<i class="material-symbols-outlined">left_panel_close</i>
 							Hide
@@ -726,7 +698,7 @@
 
 					<div
 						class="page-break talk-page"
-						v-for="talk in talks"
+						v-for="talk in (fullExport ? talks : talks.slice(0, 2))"
 					>
 						<div
 							class="talk-starter"
@@ -801,53 +773,6 @@
 
 
 			<div class="left-side">
-				<!-- <div class="view-settings">
-					<div class="btn-group">
-						<div
-							class="btn"
-							@click="zoom *= 0.75"
-						>
-							<i class="material-symbols-outlined">zoom_out</i>
-						</div>
-						<div
-							class="btn"
-							@click="zoom *= 1.25"
-						>
-							<i class="material-symbols-outlined">zoom_in</i>
-						</div>
-					</div>
-
-					<div class="btn-group">
-						<div
-							class="btn"
-							@click="bookView = false"
-							:active="bookView === false"
-						>
-							<i class="material-symbols-outlined">article</i>
-						</div>
-						<div
-							class="btn"
-							@click="bookView = true"
-							:active="bookView === true"
-						>
-							<i class="material-symbols-outlined">two_pager</i>
-						</div>
-					</div>
-
-					<div
-						class="btn"
-						@click="print"
-					>
-						<i
-							v-if="!rendering"
-							class="material-symbols-outlined"
-						>print</i>
-						<i
-							v-else
-							class="material-symbols-outlined spin"
-						>progress_activity</i>
-					</div>
-				</div> -->
 				<div class="pages-wrapper">
 					<div style="width: min-content; margin: 0 auto;">
 						<div
@@ -858,6 +783,8 @@
 								id="pages-insert"
 								:style="{ zoom, opacity: rendering ? 0.5 : 1 }"
 							></div>
+
+							<p v-if="!fullExport" class="my-4 text-center">Not all talks are shown in this preview</p>
 						</div>
 					</div>
 				</div>
@@ -875,7 +802,7 @@
 	<script src="conference-talks.js"></script>
 	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 	<script>
-		const { createApp, nextTick, defineComponent, computed, onMounted } = Vue;
+		const { createApp, nextTick, defineComponent, computed, onMounted, ref } = Vue;
 	</script>
 
 	<script src="FontInput.js"></script>
@@ -909,82 +836,153 @@
 					rendering: false,
 					init: false,
 					menuOpen: true,
-					// fontFamily: "Arial",
-					// fontSize: 12,
-					// pageMargin: "1in",
-					// renderId: 0,
-					styles: {
-						// talkTitle: {
-						// 	fontFamily: "Georgia",
-						// 	fontSize: 24,
-						// 	fontWeight: 700,
-						// 	color: "#222222",
-						// 	lineHeight: 1.2,
-						// 	textAlign: "left",
-						// },
-						// talkAuthor: {
-						// 	fontFamily: "Georgia",
-						// 	fontSize: 14,
-						// 	fontWeight: 700,
-						// 	color: "#222222",
-						// 	lineHeight: 1.2,
-						// 	textAlign: "left",
-						// },
-						// talkAuthorRole: {
-						// 	fontFamily: "Georgia",
-						// 	fontSize: 14,
-						// 	fontWeight: 700,
-						// 	fontStyle: 'italic',
-						// 	color: "#222222",
-						// 	lineHeight: 1.2,
-						// 	textAlign: "left",
-						// },
-						// talkKicker: {
-						// 	fontFamily: "Roboto",
-						// 	fontSize: 12,
-						// 	fontWeight: 400,
-						// 	color: "#222222",
-						// 	lineHeight: 1.5,
-						// 	textAlign: "justify",
-						// },
-						// H2: {
-						// 	fontFamily: "serif",
-						// 	fontSize: 16,
-						// 	fontWeight: 700,
-						// 	color: "#222222",
-						// 	lineHeight: 1.5,
-						// 	textAlign: "justify",
-						// 	marginTop: 5,
-						// 	marginBottom: 1,
-						// },
-						// H3: {
-						// 	fontFamily: "serif",
-						// 	fontSize: 12,
-						// 	fontWeight: 500,
-						// 	color: "#222222",
-						// 	lineHeight: 1.5,
-						// 	textAlign: "justify",
-						// 	marginTop: 5,
-						// 	marginBottom: 1,
-						// },
-						// paragraph: {
-						// 	fontFamily: "serif",
-						// 	fontSize: 12,
-						// 	fontWeight: 400,
-						// 	color: "#222222",
-						// 	lineHeight: 1.5,
-						// 	textAlign: "justify",
-						// 	marginTop: 5,
-						// 	marginBottom: 1,
-						// },
-					},
+					fullExport: false,
+
+					styles: { talkStyles: [
+						{
+							label: 'Defaults',
+							className: 'doc-talkTitle',
+							style: {
+								fontFamily: "Montserrat",
+								fontSize: 14,
+								fontWeight: 400,
+								color: "#222222",
+								lineHeight: 1.2,
+								textAlign: "left",
+							}
+						},
+
+						{
+							label: 'Talk Title',
+							className: 'doc-talkTitle',
+							style: {
+								fontFamily: "Montserrat",
+								fontSize: 17,
+								fontWeight: 500,
+								color: "#222222",
+								lineHeight: 1.2,
+								textAlign: "left",
+							}
+						},
+						{
+							label: 'Speaker',
+							className: 'doc-talkAuthor',
+							style: {
+								display: 'inline-block', // Added display property
+								fontFamily: "Cormorant Garamond",
+								fontSize: 11, // Changed from 14 to 11pt (or close approximation)
+								fontWeight: 400,
+								color: "#222222",
+								lineHeight: 1.2,
+								textAlign: "left",
+								marginTop: 5, // Added margin-top
+								marginBottom: 15, // Added margin-bottom
+								textTransform: 'uppercase' // Added text-transform
+							}
+						},
+						{
+							label: 'Speaker role',
+							className: 'doc-talkAuthorRole',
+							style: {
+								marginLeft: 5, // Added margin-left
+								display: 'inline-block',
+								fontFamily: 'inherit',
+								fontSize: 11, // Changed from 14 to 11pt (or close approximation)
+								fontWeight: 400,
+								fontStyle: 'normal',
+								color: "#222222",
+								lineHeight: 1.2,
+								textAlign: "left",
+								marginBottom: 15 // Added margin-bottom
+							}
+						},
+						{
+							label: 'Talk summary',
+							className: 'doc-talkKicker',
+							style: {
+								fontFamily: "Cormorant Garamond",
+								fontSize: 12,
+								fontWeight: 200,
+								fontStyle: 'italic',
+								color: "#222222",
+								lineHeight: 1.2,
+								textAlign: "left",
+								marginBottom: 15, // Added margin-bottom
+								borderTop: '1pt solid #888', // Added border properties
+								borderBottom: '1pt solid #888', // Added border properties
+								padding: '8pt 0' // Added padding
+							}
+
+						},
+						{
+							label: 'Section heading',
+							className: 'doc-H2',
+							style: {
+								fontFamily: "Montserrat",
+								fontSize: 12, // Updated size from 16 to 12pt
+								fontWeight: 500,
+								color: "#222222",
+								lineHeight: 1.2,
+								textAlign: "left", // Changed alignment to left (from justify)
+								marginBottom: 10, // Updated margin-bottom
+								marginTop: 0 // Updated margin-top
+							}
+						},
+						{
+							label: 'Subsection heading',
+							className: 'doc-H3',
+							style: {
+								fontFamily: "Montserrat",
+								fontSize: 13, // Kept original size
+								fontWeight: 500,
+								color: "#222222",
+								lineHeight: 1.2,
+								textAlign: "left", // Changed alignment to left (from justify)
+								marginBottom: 10, // Updated margin-bottom
+								marginTop: 0 // Updated margin-top
+							}
+						},
+						{
+							label: 'Paragraphs',
+							className: 'doc-paragraph',
+							style: {
+								fontFamily: 'inherit',
+								fontSize: 'inherit',
+								fontWeight: 400,
+								color: "#222222",
+								lineHeight: 1.2, // Updated line height
+								textAlign: "justify",
+								marginBottom: 10, // Updated margin-bottom
+								marginTop: 0 // Updated margin-top
+							}
+						},
+		// Optional additions for remaining classes (doc-poetry, etc.) if needed later:
+
+		/*
+		{
+			label: 'Poetry',
+			className: 'doc-poetry',
+			style: {
+				margin: '0 20pt 10pt 20pt'
+			}
+		},
+		{
+			label: 'List (ul/ol)',
+			// Note: Styling for universal elements like lists often requires handling CSS selectors outside of object style props.
+			className: 'doc-list', 
+			style: {
+				marginRight: 20 // Combined margin right
+			}
+		},
+		*/
+					]},
 				};
 			},
 			watch: {
 				styles: {
 					deep: true,
 					handler() {
-						this.renderPreview();
+						this.updatePreviewStyles();
 					},
 				},
 			},
@@ -1002,12 +1000,10 @@
 
 			methods: {
 				updatePreviewStyles() {
-					const css = Object.entries(this.styles)
-						.map(([name, config]) => {
+					const css = Array.from(Object.values(this.styles)).flat()
+						.map(({ className, style: config }) => {
 							// Map config keys to CSS class names:
 							// talkTitle -> .doc-talkTitle, body -> .doc-body
-							const className = `doc-${name}`;
-
 							return `
           #pages-insert .${className} {
             font-family: ${JSON.stringify(config.fontFamily)};
@@ -1017,8 +1013,8 @@
             color: ${config.color};
             line-height: ${Number(config.lineHeight)};
             text-align: ${config.textAlign};
-            margin-top: ${Number(config.marginTop)};
-            margin-bottom: ${Number(config.marginBottom)};
+            margin-top: ${config.marginTop}pt;
+            margin-bottom: ${config.marginBottom}pt;
           }
         `;
 						})
