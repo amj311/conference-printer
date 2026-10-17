@@ -9,7 +9,7 @@
 	>
 	<link
 		rel="stylesheet"
-		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=zoom_in,zoom_out,two_pager,article,print,progress_activity,chevron_right,keyboard_arrow_down,left_panel_open,left_panel_close,warning"
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=zoom_in,zoom_out,two_pager,article,print,progress_activity,chevron_right,keyboard_arrow_down,left_panel_open,left_panel_close,warning,format_bold,format_italic,format_line_spacing,format_align_justify,format_align_center,format_align_left,format_align_right,format_letter_spacing_wider"
 	/>
 	<style>
 		.material-symbols-outlined {
@@ -66,8 +66,7 @@
 	</style>
 
 
-	<!-- LAYOUT -->
-	<style>
+	<style> /* LAYOUT */
 		.material-symbols-outlined {
 			font-size: 1.6em;
 		}
@@ -109,11 +108,10 @@
 		.flex-scroll {
 			flex-grow: 1;
 			overflow-y: auto;
-			padding: var(--controls-padding);
+			padding-inline: var(--controls-padding);
 
 			display: flex;
 			flex-direction: column;
-			gap: 0.5rem;
 		}
 
 		.controls:not(.menuOpen) .flex-scroll {
@@ -150,8 +148,7 @@
 		}
 	</style>
 
-	<!-- UI -->
-	<style>
+	<style> /* UI */
 		/* BUTTONS */
 		.my-btn {
 			--bg-color: transparent;
@@ -225,7 +222,7 @@
 
 
 		/* DETAILS */
-		details > summary:first-of-type {
+		details:not(.dropdown) > summary:first-of-type {
 			display: flex;
 			justify-content: space-between;
 			padding: 1em;
@@ -234,38 +231,39 @@
 			user-select: none;
 		}
 
-		details>summary:first-of-type:hover {
+		details:not(.dropdown)>summary:first-of-type:hover {
 			color: var(--colors-clay-700);
 		}
 
-		details[open] > summary:first-of-type {
+		details:not(.dropdown)[open] > summary:first-of-type {
 			color: var(--colors-clay-700);
 		}
 
-		details[open] {
+		details:not(.dropdown)[open] {
 			background-color: var(--colors-slate-100);
 			border-radius: 0.5rem;
 			box-shadow: var(--shadow-1);
+			margin-bottom: 0.5rem
 		}
 
-		details > summary:first-of-type::after {
+		details:not(.dropdown) > summary:first-of-type::after {
 			display: block;
 			content: "chevron_right";
 			font-family: "Material Symbols Outlined";
 			transition: transform 200ms;
 		}
 
-		details[open] > summary:first-of-type::after {
+		details:not(.dropdown)[open] > summary:first-of-type::after {
 			transform: rotate(90deg)
 		}
 
-		details > div {
+		details:not(.dropdown) > div {
 			padding: 0 1em 1em 1em;
 		}
 	</style>
 
-	<!-- PAGES -->
-	<style>
+	
+	<style> /* PAGES */
 		/* PREVIEW */
 
 		#source {
@@ -275,11 +273,6 @@
 			opacity: 0;
 			min-height: 100vh;
 			outline: none;
-		}
-
-		#pages-insert {
-			font-family: "EB Garamond", serif;
-			font-size: 14pt;
 		}
 
 		.pagedjs_page {
@@ -309,7 +302,7 @@
 		} */
 
 		/* PRINT PREVIEW */
-		.book-view-modifier.bookView {
+		.bookView .book-view-modifier {
 			zoom: 0.5;
 		}
 
@@ -616,12 +609,43 @@
 
 					<details>
 						<summary>Talk Styles</summary>
-						<div>
-							<inline-text-style
+						<div class="flex flex-col gap-7">
+
+							<div
+								class="flex flex-col gap-2"
+							>
+								<div
+									style="
+										font-weight: 600;
+										font-size: 90%;
+										opacity: 0.9;
+									"		
+								>
+									Defaults
+								</div>
+								<inline-text-style
+									v-model:config="talkDefaultStyles"
+								></inline-text-style>
+							</div>
+
+							<div
 								v-for="style in styles.talkStyles"
-								:label="style.label"
-								v-model:config="style.style"
-							></inline-text-style>
+								class="flex flex-col gap-2"
+							>
+								<div
+									style="
+										font-weight: 600;
+										font-size: 90%;
+										opacity: 0.9;
+									"		
+								>
+									{{style.label}}
+								</div>
+								<inline-text-style
+									v-model:config="style.style"
+									:defaults="talkDefaultStyles"
+								></inline-text-style>
+							</div>
 						</div>
 					</details>
 
@@ -698,7 +722,7 @@
 
 					<div
 						class="page-break talk-page"
-						v-for="talk in (fullExport ? talks : talks.slice(0, 2))"
+						v-for="talk in (fullExport ? talks : talks.slice(0, 1))"
 					>
 						<div
 							class="talk-starter"
@@ -733,11 +757,11 @@
 										<rich-text-nodes v-if="section.credit" :nodes="section.credit.nodes" />
 									</div> -->
 
-									<ol v-if="section.type === 'ol'">
+									<ol v-if="section.type === 'ol'" class="doc-list">
 										<li v-for="item in section.items"><rich-text-nodes :nodes="item.nodes" /></li>
 									</ol>
 
-									<ul v-if="section.type === 'ul'">
+									<ul v-if="section.type === 'ul'" class="doc-list">
 										<li v-for="item in section.items"><rich-text-nodes :nodes="item.nodes" /></li>
 									</ul>
 
@@ -774,18 +798,21 @@
 
 			<div class="left-side">
 				<div class="pages-wrapper">
-					<div style="width: min-content; margin: 0 auto;">
-						<div
-							class="book-view-modifier"
-							:class="{ bookView }"
-						>
+					<div style="width: min-content; margin: 0 auto;"
+						:class="{ bookView }"
+					>
+						<div class="book-view-modifier">
 							<div
 								id="pages-insert"
 								:style="{ zoom, opacity: rendering ? 0.5 : 1 }"
 							></div>
-
-							<p v-if="!fullExport" class="my-4 text-center">Not all talks are shown in this preview</p>
 						</div>
+
+						<template v-if="!fullExport">
+							<p class="my-4 text-center">Not all talks are shown in this preview</p>
+							<p class="my-4 text-center">Below is a sample talk demonstrating all possible talk elements.</p>
+						</template>
+
 					</div>
 				</div>
 			</div>
@@ -838,20 +865,21 @@
 					menuOpen: true,
 					fullExport: false,
 
-					styles: { talkStyles: [
-						{
-							label: 'Defaults',
-							className: 'doc-talkTitle',
-							style: {
-								fontFamily: "Montserrat",
-								fontSize: 14,
-								fontWeight: 400,
-								color: "#222222",
-								lineHeight: 1.2,
-								textAlign: "left",
-							}
-						},
+					talkDefaultStyles: {
+						fontFamily: "Montserrat",
+						fontSize: 14,
+						color: "#222222",
+						fontWeight: 400,
+						fontStyle: '',
+						lineHeight: 1.2,
+						textAlign: 'left',
+						letterSpacing: 0,
+					},
 
+					styles: {
+						
+
+						talkStyles: [
 						{
 							label: 'Talk Title',
 							className: 'doc-talkTitle',
@@ -859,41 +887,28 @@
 								fontFamily: "Montserrat",
 								fontSize: 17,
 								fontWeight: 500,
-								color: "#222222",
-								lineHeight: 1.2,
-								textAlign: "left",
 							}
 						},
 						{
 							label: 'Speaker',
 							className: 'doc-talkAuthor',
 							style: {
-								display: 'inline-block', // Added display property
+								display: 'inline-block',
 								fontFamily: "Cormorant Garamond",
-								fontSize: 11, // Changed from 14 to 11pt (or close approximation)
-								fontWeight: 400,
-								color: "#222222",
-								lineHeight: 1.2,
-								textAlign: "left",
-								marginTop: 5, // Added margin-top
-								marginBottom: 15, // Added margin-bottom
-								textTransform: 'uppercase' // Added text-transform
+								fontSize: 11,
+								marginTop: 5,
+								marginBottom: 15,
+								textTransform: 'uppercase'
 							}
 						},
 						{
 							label: 'Speaker role',
 							className: 'doc-talkAuthorRole',
 							style: {
-								marginLeft: 5, // Added margin-left
+								marginLeft: 5,
 								display: 'inline-block',
-								fontFamily: 'inherit',
-								fontSize: 11, // Changed from 14 to 11pt (or close approximation)
-								fontWeight: 400,
-								fontStyle: 'normal',
-								color: "#222222",
-								lineHeight: 1.2,
-								textAlign: "left",
-								marginBottom: 15 // Added margin-bottom
+								fontSize: 11,
+								marginBottom: 15
 							}
 						},
 						{
@@ -904,13 +919,10 @@
 								fontSize: 12,
 								fontWeight: 200,
 								fontStyle: 'italic',
-								color: "#222222",
-								lineHeight: 1.2,
-								textAlign: "left",
-								marginBottom: 15, // Added margin-bottom
-								borderTop: '1pt solid #888', // Added border properties
-								borderBottom: '1pt solid #888', // Added border properties
-								padding: '8pt 0' // Added padding
+								marginBottom: 15,
+								borderTop: '1pt solid #888',
+								borderBottom: '1pt solid #888',
+								padding: '8pt 0'
 							}
 
 						},
@@ -919,13 +931,10 @@
 							className: 'doc-H2',
 							style: {
 								fontFamily: "Montserrat",
-								fontSize: 12, // Updated size from 16 to 12pt
+								fontSize: 12,
 								fontWeight: 500,
-								color: "#222222",
-								lineHeight: 1.2,
-								textAlign: "left", // Changed alignment to left (from justify)
-								marginBottom: 10, // Updated margin-bottom
-								marginTop: 0 // Updated margin-top
+								marginBottom: 10,
+								marginTop: 0
 							}
 						},
 						{
@@ -933,27 +942,52 @@
 							className: 'doc-H3',
 							style: {
 								fontFamily: "Montserrat",
-								fontSize: 13, // Kept original size
+								fontSize: 13,
 								fontWeight: 500,
-								color: "#222222",
-								lineHeight: 1.2,
-								textAlign: "left", // Changed alignment to left (from justify)
-								marginBottom: 10, // Updated margin-bottom
-								marginTop: 0 // Updated margin-top
+								marginBottom: 10,
+								marginTop: 0
 							}
 						},
 						{
 							label: 'Paragraphs',
 							className: 'doc-paragraph',
 							style: {
-								fontFamily: 'inherit',
-								fontSize: 'inherit',
-								fontWeight: 400,
-								color: "#222222",
-								lineHeight: 1.2, // Updated line height
+								fontFamily: '',
+								fontSize: '',
+								fontWeight: '',
+								color: "",
+								lineHeight: '',
 								textAlign: "justify",
-								marginBottom: 10, // Updated margin-bottom
-								marginTop: 0 // Updated margin-top
+								marginBottom: 10,
+								marginTop: 0
+							}
+						},
+						{
+							label: 'Poetry',
+							className: 'doc-poetry',
+							style: {
+								fontFamily: '',
+								fontSize: '',
+								fontWeight: '',
+								color: "",
+								lineHeight: '',
+								textAlign: "",
+								marginBottom: 10,
+								marginTop: 0
+							}
+						},
+						{
+							label: 'Lists',
+							className: 'doc-list',
+							style: {
+								fontFamily: '',
+								fontSize: '',
+								fontWeight: '',
+								color: "",
+								lineHeight: '',
+								textAlign: "",
+								marginBottom: 10,
+								marginTop: 0
 							}
 						},
 		// Optional additions for remaining classes (doc-poetry, etc.) if needed later:
@@ -985,6 +1019,12 @@
 						this.updatePreviewStyles();
 					},
 				},
+				talkDefaultStyles: {
+					deep: true,
+					handler() {
+						this.updatePreviewStyles();
+					},
+				},
 			},
 
 			mounted() {
@@ -1006,13 +1046,14 @@
 							// talkTitle -> .doc-talkTitle, body -> .doc-body
 							return `
           #pages-insert .${className} {
-            font-family: ${JSON.stringify(config.fontFamily)};
-            font-size: ${Number(config.fontSize)}pt;
-            font-weight: ${Number(config.fontWeight)};
-            font-style: ${config.fontStyle};
-            color: ${config.color};
-            line-height: ${Number(config.lineHeight)};
-            text-align: ${config.textAlign};
+            font-family: ${JSON.stringify(config.fontFamily || this.talkDefaultStyles.fontFamily)};
+            font-size: ${config.fontSize || this.talkDefaultStyles.fontSize || 14}pt;
+            font-weight: ${config.fontWeight || this.talkDefaultStyles.fontWeight};
+            font-style: ${config.fontStyle || this.talkDefaultStyles.fontStyle};
+            color: ${config.color || this.talkDefaultStyles.color};
+            line-height: ${config.lineHeight || this.talkDefaultStyles.lineHeight};
+            text-align: ${config.textAlign || this.talkDefaultStyles.textAlign};
+            letter-spacing: ${config.letterSpacing || this.talkDefaultStyles.letterSpacing}%;
             margin-top: ${config.marginTop}pt;
             margin-bottom: ${config.marginBottom}pt;
           }
@@ -1133,19 +1174,13 @@
 			display: flex;
 			flex-wrap: wrap;
 			align-items: end;
-			gap: 12px;
-			padding: 12px;
-			border: 1px solid #ccc;
+			gap: 8px;
 		}
 
-		.text-style-control label {
-			display: grid;
-			gap: 4px;
-		}
-
-		.text-style-control input,
-		.text-style-control select {
-			max-width: 180px;
+		.text-style-control .btn.join-item {
+			--btn-p: 0 !important;
+			flex-grow: 1;
+			flex-shrink: 0;
 		}
 	</style>
 </body>

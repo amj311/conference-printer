@@ -1,3 +1,457 @@
+const testTalk =  {
+        "title": "Sample Talk: God is at your Side",
+        "author": "Andrea Muñoz Spannaus",
+        "authorRole": "Second Counselor in the Young Women General Presidency",
+        "kicker": "I invite you to look at your life and what you want to achieve with enthusiasm and the certainty that your Father in Heaven will guide you.",
+        "bodySections": [
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "Dear young women, how crucial and important you are as members of the Church of Jesus Christ in these latter days!"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "When I was your age, I remember a lesson where we studied the "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "A",
+                        "innerText": "thirteenth article of faith",
+                        "href": "https://www.churchofjesuschrist.org/study/scriptures/pgp/a-of-f/1?lang=eng&id=p13#p13"
+                    },
+                    {
+                        "type": "text",
+                        "text": ". When the class was over, I kept thinking about this part: “If there is anything virtuous, lovely, or of good report or praiseworthy, we seek after these things.”"
+                    },
+                    {
+                        "type": "note",
+                        "noteNumber": "1"
+                    },
+                    {
+                        "type": "text",
+                        "text": " I wondered what my aspirations were and what I wanted to achieve in my life. So I decided to make a list of those things—good, positive things that would bring me closer to God and would help me learn, contribute, create, and be happy. I spent that Sunday afternoon thinking and writing about the virtuous and good things I wanted to have happen in my life."
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "Today I invite you to look at your life and what you want to achieve with enthusiasm and the certainty that your Father in Heaven will guide you on that journey and show you "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "EM",
+                        "innerText": "the best way"
+                    },
+                    {
+                        "type": "text",
+                        "text": " to make the righteous desires of your heart come true."
+                    },
+                    {
+                        "type": "note",
+                        "noteNumber": "2"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "I want to illustrate this concept with an experience. On my way to the dentist, I put the address in my phone. While I was driving on the freeway, the GPS thought I was on a parallel street and kept telling me to turn right—when there was no place to turn. Finally, I pulled off the freeway and called my husband for help. When I gave him my exact location, he was able to guide me to the place I wanted to go."
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "Dear young women, the Lord knows where you are; He has your exact location and can guide you. He knows your dreams and your gifts. He knows when you feel alone and what your questions are. He knows your challenges and how to turn your weaknesses into strengths."
+                    },
+                    {
+                        "type": "note",
+                        "noteNumber": "3"
+                    },
+                    {
+                        "type": "text",
+                        "text": " He knows everything. And knowing everything about you does not make Him love you less."
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "Once a young man came running, kneeling before Jesus Christ, and asking Him, “What can I do to gain eternal life?” The young man said he had always obeyed the commandments. Would Jesus know what else this young man could do? Of course! But "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "EM",
+                        "innerText": "before"
+                    },
+                    {
+                        "type": "text",
+                        "text": " He tells him, look at what happened. In "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "A",
+                        "innerText": "Mark 10:21",
+                        "href": "https://www.churchofjesuschrist.org/study/scriptures/nt/mark/10?lang=eng&id=p21#p21"
+                    },
+                    {
+                        "type": "text",
+                        "text": ", we read, “Jesus beholding him "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "EM",
+                        "innerText": "loved"
+                    },
+                    {
+                        "type": "text",
+                        "text": " him.”"
+                    },
+                    {
+                        "type": "note",
+                        "noteNumber": "4"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "Can you imagine those moments when Jesus looks at this young man? A look that conveys only love: love of the highest quality. Only "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "EM",
+                        "innerText": "after"
+                    },
+                    {
+                        "type": "text",
+                        "text": " transmitting that love did He tell him what he could do to improve."
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "Our Father and our Savior know you and have the same perfect love for you. Part of that love and mercy is giving us many opportunities and being patient as we learn and work on our list of aspirations."
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "Dear young women, I testify that you are "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "EM",
+                        "innerText": "beloved"
+                    },
+                    {
+                        "type": "text",
+                        "text": " daughters of heavenly parents, with a "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "EM",
+                        "innerText": "divine"
+                    },
+                    {
+                        "type": "text",
+                        "text": " nature and an "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "EM",
+                        "innerText": "eternal"
+                    },
+                    {
+                        "type": "text",
+                        "text": " destiny."
+                    },
+                    {
+                        "type": "note",
+                        "noteNumber": "5"
+                    },
+                    {
+                        "type": "text",
+                        "text": " Each of you has a "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "EM",
+                        "innerText": "crucial and important work"
+                    },
+                    {
+                        "type": "text",
+                        "text": " to do here on earth."
+                    },
+                    {
+                        "type": "note",
+                        "noteNumber": "6"
+                    },
+                    {
+                        "type": "text",
+                        "text": " That work is different for each person, but if you choose to love God and Jesus Christ and to trust Them, doing that work will bring you the same great joy."
+                    },
+                    {
+                        "type": "note",
+                        "noteNumber": "7"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "I would like to share seven ways that will help you in this endeavor. I invite you to listen to the Spirit to choose one to focus on over the next few weeks."
+                    }
+                ]
+            },
+            {
+                "type": "ol",
+                "items": [
+                    {
+                        "nodes": [
+                            {
+                                "type": "text",
+                                "text": "Partake of the sacrament with a humble heart, grateful for the promise that as you keep your covenants, the Holy Ghost will be your constant companion. Begin each day by asking the Father for that companionship."
+                            },
+                            {
+                                "type": "note",
+                                "noteNumber": "8"
+                            }
+                        ]
+                    },
+                    {
+                        "nodes": [
+                            {
+                                "type": "text",
+                                "text": "Repent daily and at the end of the day, as you pray, ask for forgiveness."
+                            },
+                            {
+                                "type": "note",
+                                "noteNumber": "9"
+                            }
+                        ]
+                    },
+                    {
+                        "nodes": [
+                            {
+                                "type": "text",
+                                "text": "Study the scriptures with a desire to know God’s character so you can do His will, increase your love for Him, and advance His work."
+                            },
+                            {
+                                "type": "note",
+                                "noteNumber": "10"
+                            }
+                        ]
+                    },
+                    {
+                        "nodes": [
+                            {
+                                "type": "text",
+                                "text": "Study what it means to have ministering angels help you."
+                            },
+                            {
+                                "type": "note",
+                                "noteNumber": "11"
+                            }
+                        ]
+                    },
+                    {
+                        "nodes": [
+                            {
+                                "type": "text",
+                                "text": "Protect your sleep; go to bed early. Get enough sleep to keep your mind clear and alert."
+                            },
+                            {
+                                "type": "note",
+                                "noteNumber": "12"
+                            },
+                            {
+                                "type": "text",
+                                "text": " When we sleep, the brain performs vital functions to work properly."
+                            }
+                        ]
+                    },
+                    {
+                        "nodes": [
+                            {
+                                "type": "text",
+                                "text": "Limit cell phone use. Social media makes us believe we are connected; however, it is a thief of our peace of mind, self-esteem, and the real connection that makes us feel loved, accepted, heard, and valued when spending time face to face with others."
+                            },
+                            {
+                                "type": "note",
+                                "noteNumber": "13"
+                            }
+                        ]
+                    },
+                    {
+                        "nodes": [
+                            {
+                                "type": "text",
+                                "text": "And number seven is an invitation from our prophet, President Dallin H. Oaks: “Seek friends … who are striving to follow the Lord … with whom you can feel the Spirit and … reinforce your faith.”"
+                            },
+                            {
+                                "type": "note",
+                                "noteNumber": "14"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "A few years ago, we had recently moved from Argentina to the United States, and I was learning English. (I am still learning!) At that time, my calling involved teaching. That day I felt everything I said had been wrong, that I had mispronounced words and made many grammatical errors—that it had been a complete disaster! I felt depressed, as if I were in a black cloud. I wondered why God had given me this calling if I couldn’t even speak! I was confused and didn’t see a way out. That night I went to sleep in tears, hoping I would feel better in the morning. But in the morning, I woke up feeling the same."
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "Then my husband gave me a priesthood blessing, and "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "EM",
+                        "innerText": "in that moment"
+                    },
+                    {
+                        "type": "text",
+                        "text": ", I felt the heavens open. In the blessing, I was told, “Satan wants to destroy your self-esteem, your mind, your thoughts, and your spirit.” And then I received these words: “But the Father, Jesus Christ, and the Holy Ghost are at your side.”"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "Dear young women, I testify that the Lord has greater power than the enemy. He knows where you are and has promised to lead you by the hand."
+                    },
+                    {
+                        "type": "note",
+                        "noteNumber": "15"
+                    },
+                    {
+                        "type": "text",
+                        "text": " Always put Him first and remain faithful to the covenants you made at your baptism. Angels can minister to you. The Father, Jesus Christ, and the Holy Ghost are at your side."
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "nodes": [
+                    {
+                        "type": "text",
+                        "text": "I invite you to study the "
+                    },
+                    {
+                        "type": "element",
+                        "nodeName": "A",
+                        "innerText": "thirteenth article of faith",
+                        "href": "https://www.churchofjesuschrist.org/study/scriptures/pgp/a-of-f/1?lang=eng&id=p13#p13"
+                    },
+                    {
+                        "type": "text",
+                        "text": " and to create your own list of aspirations. I express my love for you and my confidence in all the beautiful things you will achieve in your lives. In the name of Jesus Christ, amen."
+                    }
+                ]
+            }
+        ],
+        "notes": [
+            {
+                "noteNumber": 1,
+                "text": "Articles of Faith 1:13."
+            },
+            {
+                "noteNumber": 2,
+                "text": "See Isaiah 48:17."
+            },
+            {
+                "noteNumber": 3,
+                "text": "See Ether 12:27."
+            },
+            {
+                "noteNumber": 4,
+                "text": "Mark 10:21, emphasis added; see also Mark 10:17–20."
+            },
+            {
+                "noteNumber": 5,
+                "text": "See “Young Women Theme,” Gospel Library."
+            },
+            {
+                "noteNumber": 6,
+                "text": "“You have an important place in His Church. Jesus Christ will help you fulfill His purposes for you” (“Message from the First Presidency,” For the Strength of Youth: A Guide for Making Choices [2025], 2)."
+            },
+            {
+                "noteNumber": 7,
+                "text": "Our Heavenly Father invites all of us to assist in His work of bringing to pass the eternal life of His children (see Moses 1:39; General Handbook: Serving in The Church of Jesus Christ of Latter-day Saints, 1.2, Gospel Library). He also blesses us with specific responsibilities within His work. President Dieter F. Uchtdorf explained: “The Lord gave you your responsibilities for a reason. There may be people and hearts only you can reach and touch. Perhaps no one else could do it in quite the same way” (“Lift Where You Stand,” Liahona, Nov. 2008, 56)."
+            },
+            {
+                "noteNumber": 8,
+                "text": "See For the Strength of Youth, 23; Doctrine and Covenants 84:20: “Therefore, in the ordinances [of the priesthood], the power of godliness is manifest.”"
+            },
+            {
+                "noteNumber": 9,
+                "text": "“Persons who have this remission of sins—and then regularly renew their cleansing by daily repentance and living according to the covenants they make through the ordinance of the sacrament—qualify for the promise that the Holy Ghost, the Spirit of the Lord, ‘may always … be with them’ (Doctrine and Covenants 20:77)” (Dallin H. Oaks, “Divine Helps for Mortality,” Liahona, May 2025, 105)."
+            },
+            {
+                "noteNumber": 10,
+                "text": "“Become an engaged learner. Immerse yourself in the scriptures to understand better Christ’s mission and ministry. Know the doctrine of Christ so that you understand its power for your life. Internalize the truth that the Atonement of Jesus Christ applies to you. …"
+            },
+            {
+                "noteNumber": 11,
+                "text": "See Doctrine and Covenants 13:1; Dallin H. Oaks, “The Aaronic Priesthood and the Sacrament,” Liahona, Jan. 1999, 43–46."
+            },
+            {
+                "noteNumber": 12,
+                "text": "See Doctrine and Covenants 88:124."
+            },
+            {
+                "noteNumber": 13,
+                "text": "See For the Strength of Youth, 24."
+            },
+            {
+                "noteNumber": 14,
+                "text": "Dallin H. Oaks, “Coming Closer to Jesus Christ” (Brigham Young University devotional, Feb. 10, 2026), speeches.byu.edu."
+            },
+            {
+                "noteNumber": 15,
+                "text": "See Isaiah 41:13; Doctrine and Covenants 112:10."
+            }
+        ]
+    }
+
+
 const talks = [
     // {
     //     "title": "Sustaining of General Authorities, Area Seventies, and General Officers",

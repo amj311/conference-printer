@@ -22,7 +22,10 @@ const FontInput = defineComponent({
 	props: {
 		modelValue: {
 			type: String,
-			default: "Roboto",
+		},
+		default: {
+			type: String,
+			required: false,
 		},
 	},
 
@@ -43,14 +46,15 @@ const FontInput = defineComponent({
 		});
 		const options = computed(() => Array.from(new Set([
 			{
-				label: "New font...",
+				label: "+ New font...",
 				value: '__new__',
 				key: '__new__',
 			},
 			{
 				label: 'Default',
-				value: 'inherit',
-				key: 'inherit',
+				value: '',
+				css: props.default || 'sans-serif',
+				key: 'default',
 			},
 			...allFonts.value.map(f => ({
 				label: f,
@@ -86,7 +90,7 @@ const FontInput = defineComponent({
 		async function loadFont(font, full = false) {
 			if (!font || font === 'inherit') return;
 
-			const id = `google-font-${font.replace(/\W/g, "-")}`;
+			const id = `google-font-${font.replace(/\W/g, "-")}-${String(full)}`;
 			if (document.getElementById(id)) return;
 
 			// test url 
@@ -127,7 +131,7 @@ const FontInput = defineComponent({
 				window[modalId]?.showModal();
 				// reset the value displayed in the select
 				const previous = selected.value;
-				setFont('inherit');
+				setFont('');
 				await nextTick();
 				setFont(previous);
 				return;
@@ -135,7 +139,7 @@ const FontInput = defineComponent({
 			setFont(font);
 		}
 
-		const newFontNameOrUrl = ref('new font');
+		const newFontNameOrUrl = ref('');
 
 		async function tryAddFont() {
 			const input = newFontNameOrUrl.value;
@@ -187,8 +191,7 @@ const FontInput = defineComponent({
 			setFont(fontToUse);
 		}
 
-		return () =>
-			Vue.h("span", { class: "font-picker" }, [
+		return () => [
 				Vue.h(
 					"select",
 					{
@@ -197,13 +200,13 @@ const FontInput = defineComponent({
 						class: 'select',
 						style: { fontFamily: `"${selected.value}", sans-serif` },
 					},
-					options.value.map(({ key, value, label, invalid }) =>
+					options.value.map(({ key, value, label, invalid, css }) =>
 						Vue.h(
 							"option",
 							{
 								key,
 								value,
-								style: { fontFamily: value },
+								style: { fontFamily: css || value },
 							},
 							[
 								label,
@@ -268,6 +271,7 @@ const FontInput = defineComponent({
 						]
 					)
 				)
-			]);
+		]
+			
 	},
 });
