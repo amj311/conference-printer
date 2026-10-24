@@ -1,75 +1,222 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Paged.js page-break example</title>
+    <meta charset="UTF-8">
+    <title>Auto-Paginated Document</title>
+    <style>
+        body {
+            font-family: "Times New Roman", serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: #f0f0f0;
+        }
 
-  <style>
-    @page {
-      size: A5;
-      margin: 20mm;
-      outline: 1px solid;
-    }
+        /* Screen View: A single centered column to mimic a page */
+        .document-container {
+            background: white;
+            width: 8.5in;
+            margin: 2rem auto;
+            padding: 1in;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
 
-    body {
-      font: 16px/1.5 sans-serif;
-    }
+        /* Print Settings */
+        @media print {
+            body { background: none; }
+            .document-container {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+            }
+            @page {
+                size: letter;
+                margin: 1in; /* Set margins here instead of in the div */
+            }
+        }
 
-.chapter {
-  break-after: page !important;
-}
+        /* THE PAGINATION LOGIC */
 
-    #rendered {
-      margin: 2rem auto;
-    }
-  </style>
+        h2 {
+            /* Prevent a heading from appearing at the very bottom of a page 
+               without at least some content following it */
+            break-after: avoid;
+            page-break-after: avoid;
+        }
 
-  <script>
-    window.PagedConfig = { auto: false };
-  </script>
-  <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+        .keep-together {
+            /* Use this class for images with captions or small tables 
+               that should never be split across two pages */
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .force-page-break {
+            /* Use this when you explicitly want to start a new page 
+               (e.g., for a new chapter) */
+            break-before: page;
+            page-break-before: always;
+        }
+    </style>
 </head>
 <body>
-  <main id="source">
-    <section class="chapter">
-      <h1>Chapter One</h1>
-      <p>This content begins on page 1.</p>
-    </section>
 
-    <section class="chapter">
-      <h1>Chapter Two</h1>
-      <p>The <code>break-before: page</code> rule starts this on a new page.</p>
-    </section>
+    <div class="document-container">
+        <h1>The Great Free-Form Report</h1>
+        <p>This document is written as one long stream. The browser will calculate exactly where the page ends based on the font size and margins.</p>
 
-    <section class="chapter">
-      <h1>Chapter Three</h1>
-      <p>This also begins on a new page.</p>
-    </section>
-  </main>
+        <h2>Section 1: Natural Flow</h2>
+        <p>You can write pages and pages of text here. The browser will automatically wrap the text onto Page 2, Page 3, and so on. You don't need to manually create "page divs."</p>
 
-  <div id="rendered"></div>
+        <div class="keep-together">
+            <strong>Important Note:</strong> 
+            <p>This paragraph is inside a "keep-together" block. If this block happens to fall right on the edge of a page break, the browser will push the entire block to the next page rather than splitting it in half.</p>
+        </div>
 
-  <script>
-    window.addEventListener("load", async () => {
-      const source = document.querySelector("#source");
-      const target = document.querySelector("#rendered");
+        <div class="force-page-break">
+            <h2>Section 2: Forced Break</h2>
+            <p>Even though there was plenty of room on the previous page, I used the <code>.force-page-break</code> class to ensure this section starts on a brand new sheet of paper.</p>
+        </div>
 
-      await window.PagedPolyfill.preview(source, ["./pages.css"], target);
+        <p>Continue writing your content here... the render engine handles the rest.</p>
 
-      console.log(typeof window.PagedPolyfill);
-console.log(getComputedStyle(document.querySelector(".chapter")).breakAfter);
-console.log(
-  document.querySelectorAll("#rendered .pagedjs_page").length
-);
+        <h1>The Great Free-Form Report</h1>
+        <p>This document is written as one long stream. The browser will calculate exactly where the page ends based on the font size and margins.</p>
 
-const second = document.querySelectorAll("#source .chapter")[1];
-console.log(getComputedStyle(second).breakBefore);
-console.log(getComputedStyle(second).pageBreakBefore);
+        <h2>Section 1: Natural Flow</h2>
+        <p>You can write pages and pages of text here. The browser will automatically wrap the text onto Page 2, Page 3, and so on. You don't need to manually create "page divs."</p>
 
+        <div class="keep-together">
+            <strong>Important Note:</strong> 
+            <p>This paragraph is inside a "keep-together" block. If this block happens to fall right on the edge of a page break, the browser will push the entire block to the next page rather than splitting it in half.</p>
+        </div>
 
+        <div class="force-page-break">
+            <h2>Section 2: Forced Break</h2>
+            <p>Even though there was plenty of room on the previous page, I used the <code>.force-page-break</code> class to ensure this section starts on a brand new sheet of paper.</p>
+        </div>
 
-    });
-    
-  </script>
+        <p>Continue writing your content here... the render engine handles the rest.</p>
+	        <h1>The Great Free-Form Report</h1>
+        <p>This document is written as one long stream. The browser will calculate exactly where the page ends based on the font size and margins.</p>
+
+        <h2>Section 1: Natural Flow</h2>
+        <p>You can write pages and pages of text here. The browser will automatically wrap the text onto Page 2, Page 3, and so on. You don't need to manually create "page divs."</p>
+
+        <div class="keep-together">
+            <strong>Important Note:</strong> 
+            <p>This paragraph is inside a "keep-together" block. If this block happens to fall right on the edge of a page break, the browser will push the entire block to the next page rather than splitting it in half.</p>
+        </div>
+
+        <div class="force-page-break">
+            <h2>Section 2: Forced Break</h2>
+            <p>Even though there was plenty of room on the previous page, I used the <code>.force-page-break</code> class to ensure this section starts on a brand new sheet of paper.</p>
+        </div>
+
+        <p>Continue writing your content here... the render engine handles the rest.</p>
+	        <h1>The Great Free-Form Report</h1>
+        <p>This document is written as one long stream. The browser will calculate exactly where the page ends based on the font size and margins.</p>
+
+        <h2>Section 1: Natural Flow</h2>
+        <p>You can write pages and pages of text here. The browser will automatically wrap the text onto Page 2, Page 3, and so on. You don't need to manually create "page divs."</p>
+
+        <div class="keep-together">
+            <strong>Important Note:</strong> 
+            <p>This paragraph is inside a "keep-together" block. If this block happens to fall right on the edge of a page break, the browser will push the entire block to the next page rather than splitting it in half.</p>
+        </div>
+
+        <div class="force-page-break">
+            <h2>Section 2: Forced Break</h2>
+            <p>Even though there was plenty of room on the previous page, I used the <code>.force-page-break</code> class to ensure this section starts on a brand new sheet of paper.</p>
+        </div>
+
+        <p>Continue writing your content here... the render engine handles the rest.</p>
+	        <h1>The Great Free-Form Report</h1>
+        <p>This document is written as one long stream. The browser will calculate exactly where the page ends based on the font size and margins.</p>
+
+        <h2>Section 1: Natural Flow</h2>
+        <p>You can write pages and pages of text here. The browser will automatically wrap the text onto Page 2, Page 3, and so on. You don't need to manually create "page divs."</p>
+
+        <div class="keep-together">
+            <strong>Important Note:</strong> 
+            <p>This paragraph is inside a "keep-together" block. If this block happens to fall right on the edge of a page break, the browser will push the entire block to the next page rather than splitting it in half.</p>
+        </div>
+
+        <div class="force-page-break">
+            <h2>Section 2: Forced Break</h2>
+            <p>Even though there was plenty of room on the previous page, I used the <code>.force-page-break</code> class to ensure this section starts on a brand new sheet of paper.</p>
+        </div>
+
+        <p>Continue writing your content here... the render engine handles the rest.</p>
+	        <h1>The Great Free-Form Report</h1>
+        <p>This document is written as one long stream. The browser will calculate exactly where the page ends based on the font size and margins.</p>
+
+        <h2>Section 1: Natural Flow</h2>
+        <p>You can write pages and pages of text here. The browser will automatically wrap the text onto Page 2, Page 3, and so on. You don't need to manually create "page divs."</p>
+
+        <div class="keep-together">
+            <strong>Important Note:</strong> 
+            <p>This paragraph is inside a "keep-together" block. If this block happens to fall right on the edge of a page break, the browser will push the entire block to the next page rather than splitting it in half.</p>
+        </div>
+
+        <div class="force-page-break">
+            <h2>Section 2: Forced Break</h2>
+            <p>Even though there was plenty of room on the previous page, I used the <code>.force-page-break</code> class to ensure this section starts on a brand new sheet of paper.</p>
+        </div>
+
+        <p>Continue writing your content here... the render engine handles the rest.</p>
+	        <h1>The Great Free-Form Report</h1>
+        <p>This document is written as one long stream. The browser will calculate exactly where the page ends based on the font size and margins.</p>
+
+        <h2>Section 1: Natural Flow</h2>
+        <p>You can write pages and pages of text here. The browser will automatically wrap the text onto Page 2, Page 3, and so on. You don't need to manually create "page divs."</p>
+
+        <div class="keep-together">
+            <strong>Important Note:</strong> 
+            <p>This paragraph is inside a "keep-together" block. If this block happens to fall right on the edge of a page break, the browser will push the entire block to the next page rather than splitting it in half.</p>
+        </div>
+
+        <div class="force-page-break">
+            <h2>Section 2: Forced Break</h2>
+            <p>Even though there was plenty of room on the previous page, I used the <code>.force-page-break</code> class to ensure this section starts on a brand new sheet of paper.</p>
+        </div>
+
+        <p>Continue writing your content here... the render engine handles the rest.</p>
+	        <h1>The Great Free-Form Report</h1>
+        <p>This document is written as one long stream. The browser will calculate exactly where the page ends based on the font size and margins.</p>
+
+        <h2>Section 1: Natural Flow</h2>
+        <p>You can write pages and pages of text here. The browser will automatically wrap the text onto Page 2, Page 3, and so on. You don't need to manually create "page divs."</p>
+
+        <div class="keep-together">
+            <strong>Important Note:</strong> 
+            <p>This paragraph is inside a "keep-together" block. If this block happens to fall right on the edge of a page break, the browser will push the entire block to the next page rather than splitting it in half.</p>
+        </div>
+
+        <div class="force-page-break">
+            <h2>Section 2: Forced Break</h2>
+            <p>Even though there was plenty of room on the previous page, I used the <code>.force-page-break</code> class to ensure this section starts on a brand new sheet of paper.</p>
+        </div>
+
+        <p>Continue writing your content here... the render engine handles the rest.</p>
+	        <h1>The Great Free-Form Report</h1>
+        <p>This document is written as one long stream. The browser will calculate exactly where the page ends based on the font size and margins.</p>
+
+        <h2>Section 1: Natural Flow</h2>
+        <p>You can write pages and pages of text here. The browser will automatically wrap the text onto Page 2, Page 3, and so on. You don't need to manually create "page divs."</p>
+
+        <div class="keep-together">
+            <strong>Important Note:</strong> 
+            <p>This paragraph is inside a "keep-together" block. If this block happens to fall right on the edge of a page break, the browser will push the entire block to the next page rather than splitting it in half.</p>
+        </div>
+
+        <div class="force-page-break">
+            <h2>Section 2: Forced Break</h2>
+            <p>Even though there was plenty of room on the previous page, I used the <code>.force-page-break</code> class to ensure this section starts on a brand new sheet of paper.</p>
+        </div>
+
+        <p>Continue writing your content here... the render engine handles the rest.</p>	</div>
+
 </body>
 </html>

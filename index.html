@@ -62,6 +62,8 @@
 			--shadow-1: 0 0.1rem 0.3rem #0002;
 
 			font-size: 15px;
+		
+			--controls-padding: 1rem;
 		}
 	</style>
 
@@ -92,7 +94,6 @@
 		}
 
 		.controls {
-			--controls-padding: 1rem;
 
 			display: flex;
 			flex-direction: column;
@@ -126,13 +127,21 @@
 		}
 		.controls:not(.menuOpen) .view-settings {
 			flex-direction: column;
+			flex-grow: 1;
 		}
 
 		.bottom-controls {
 			padding: var(--controls-padding);
 		}
 
-		.left-side {
+		.left-view-controls {
+			padding: 0.5rem;
+			display: flex;
+			flex-direction: column;
+			justify-content: end;
+		}
+
+		.pages-area {
 			flex-grow: 1;
 			display: flex;
 			flex-direction: column;
@@ -152,13 +161,18 @@
 		/* BUTTONS */
 		.my-btn {
 			--bg-color: transparent;
-			--bg-color-active: var(--colors-slate-100);
-			--bg-color-hover: var(--colors-clay-100);
+			--bg-color-active: transparent;
+			--bg-color-hover: var(--colors-slate-100);
 			--bg-border-color: transparent;
 
 			--color: var(--colors-slate-800);
 			--color-hover: var(--colors-clay-700);
 			--color-active: var(--colors-clay-700);
+
+			--border-color: var(--bg-color);
+			--border-color-active: var(--color-active);
+			--border-color-hover: var(--bg-color);
+			--border-width: 1px;
 
 			--shadow: none;
 			--shadow-hover: var(--shadow-1);
@@ -167,8 +181,9 @@
 			color: var(--color);
 			background: var(--bg-color);
 			box-shadow: var(--shadow);
+			border: var(--border-color) var(--border-width) solid;
 
-			padding: 0.5em 0.8em;
+			padding: 0.3em;
 			cursor: pointer;
 			user-select: none;
 			border-radius: 0.5rem;
@@ -183,14 +198,22 @@
 		.my-btn:active,
 		.my-btn[active="true"] {
 			background: var(--bg-color-active);
-			color: var(--color-active);
+			border-color: var(--color-active);
+			color: var(--border-color-active);
 			box-shadow: var(--shadow-active);
 		}
 
 		.my-btn:hover {
 			background: var(--bg-color-hover);
 			color: var(--color-hover);
+			border-color: var(--border-color-hover);
 			box-shadow: var(--shadow-hover);
+		}
+
+		.btn-outline {
+			--border-color: var(--color);
+			--border-color-active: var(--color-active);
+			--border-color-hover: var(--color-hover);
 		}
 
 		.my-btn-group {
@@ -199,6 +222,12 @@
 
 		.my-btn-group .my-btn {
 			border-radius: 0;
+			flex-grow: 1;
+			flex-shrink: 0;
+		}
+
+		.my-btn-group .my-btn + .my-btn {
+			margin-left: calc(-1 * var(--border-width));
 		}
 
 		.my-btn-group .my-btn:first-child {
@@ -218,6 +247,13 @@
 			to {
 				transform: rotate(360deg);
 			}
+		}
+
+		.absolute-center {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			translate: -50% -50%;
 		}
 
 
@@ -264,15 +300,22 @@
 
 	
 	<style> /* PAGES */
-		/* PREVIEW */
 
-		#source {
+		.offscreen {
 			position: fixed;
 			translate: 100vw;
 			user-select: none;
 			opacity: 0;
 			min-height: 100vh;
 			outline: none;
+		}
+
+		/* PREVIEW */
+
+		#source-staging-area {
+		}
+
+		#render-staging-area {
 		}
 
 		.pagedjs_page {
@@ -284,22 +327,13 @@
 
 		.talk-page {
 			page: talks;
-			width: calc(100% - 50mm);
+			width: calc(100% - var(--notes-margin-width));
 		}
 
 		/* NOTE MARGINS */
-		.pagedjs_page:nth-of-type(even) .pagedjs_pagebox.contains-talk .talk-page {
-			margin-left: 50mm;
+		.pagedjs_page:nth-of-type(even) .pagedjs_pagebox .talk-page {
+			margin-left: var(--notes-margin-width);
 		}
-
-		.pagedjs_page:nth-of-type(odd) .pagedjs_pagebox.contains-talk {}
-
-		/* .pagedjs_pagebox .pageNumber {
-			position: absolute;
-			bottom: calc(var(--pagedjs-margin-bottom) - 15pt);
-			left: 50%;
-			translate: -50%;
-		} */
 
 		/* PRINT PREVIEW */
 		.bookView .book-view-modifier {
@@ -338,15 +372,13 @@
 			column-gap: 0.35in;
 		}
 
-		/* NUMBERED PARAGRAPHS */
-
-		.talk-paragraph {
+		/* NUMBERED TALK SECTIONS */
+		.body-section {
 			position: relative;
-			text-align: justify;
 		}
 
-		.talk-paragraph::before {
-			content: attr(data-marker);
+		.body-section::before {
+			content: attr(data-section-number);
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -376,112 +408,62 @@
 
 
 		/* DOC ELEMENT STYLES */
-		/* .doc-talkTitle {
-			font-family: "Montserrat", sans-serif;
-			font-size: 17pt;
-			font-weight: 500;
-			color: #222222;
-			line-height: 1.2;
-			text-align: left;
-		} */
+		.doc-talkTitle {
+		}
 
 		.doc-talkAuthor {
-			display: inline-block;
-			font-family: "Cormorant Garamond", serif;
-			font-size: 11pt;
-			font-weight: 400;
-			color: #222222;
-			line-height: 1.2;
-			text-align: left;
-			margin-top: 5pt;
-			margin-bottom: 15pt;
 			text-transform: uppercase;
 		}
 
 		.doc-talkAuthorRole {
-			margin-left: 5pt;
-			display: inline-block;
-			font-family: inherit;
-			font-size: 11pt;
-			font-weight: 400;
-			font-style: normal;
-			color: #222222;
-			line-height: 1.2;
-			text-align: left;
-			margin-bottom: 15pt;
 		}
 
 		.doc-talkKicker {
-			font-family: "Cormorant Garamond", serif;
-			font-size: 12pt;
-			font-weight: 200;
-			font-style: italic;
-			color: #222222;
-			line-height: 1.2;
-			text-align: left;
-			margin-bottom: 15pt;
 			border-top: 1pt solid #888;
 			border-bottom: 1pt solid #888;
 			padding: 8pt 0;
 		}
 
 		.doc-H2 {
-			font-family: "Montserrat", sans-serif;
-			font-size: 12pt;
-			font-weight: 500;
-			color: #222222;
-			line-height: 1.2;
-			text-align: left;
-			margin-bottom: 10pt;
-			margin-top: 0pt;
 		}
 
 		.doc-H3 {
-			font-family: "Montserrat", sans-serif;
-			font-size: 13pt;
-			font-weight: 500;
-			color: #222222;
-			line-height: 1.2;
-			text-align: left;
-			margin-bottom: 10pt;
-			margin-top: 0pt;
 		}
 
 		.doc-paragraph {
-			font-family: inherit;
-			font-size: inherit;
-			font-weight: 400;
-			color: #222222;
-			line-height: 1.2;
-			text-align: justify;
-			margin-bottom: 10pt;
-			margin-top: 0pt;
 		}
 
 		.doc-poetry {
-			margin: 0 20pt 10pt 20pt;
 		}
 
-		.doc-ul,
+		.doc-ul {
+			list-style: disc;
+		    padding-left: 1em;
+		}
 		.doc-ol {
-			margin-right: 20pt;
+			list-style: decimal;
+		    padding-left: 1em;
 		}
 
 		.doc-ul li,
 		.doc-ol li {
 			margin: 10pt 0;
+			display: list-item;
 		}
 
-		.footnotes {
-			margin-top: 20pt;
+		.hideImages .doc-image {
+			display: none;
 		}
 
 		.footnotes ol {
+			list-style: decimal;
+		    padding-left: 1em;
 			margin: 0;
-			margin-top: 10pt;
+			margin-bottom: 5pt;
 		}
 
 		.footnotes li {
+			display: list-item;
 			margin: 5pt 0;
 			font-size: 12pt;
 		}
@@ -493,20 +475,20 @@
 			/* Make sure we scroll */
 			body,
 			.layout,
-			.left-side,
+			.pages-area,
 			.pages-wrapper {
 				overflow: visible !important;
 			}
 
 			/* Hide everything not within the preview */
-			#source,
+			#source-staging-area-staging-area,
 			.view-settings,
 			.controls {
 				display: none !important;
 			}
 
 			/* Show only the rendered Paged.js pages */
-			#pages-insert {
+			#zoom-modifier {
 				zoom: 1 !important;
 				margin: 0 !important;
 				padding: 0 !important;
@@ -561,7 +543,6 @@
 						<i class="material-symbols-outlined">two_pager</i>
 					</div>
 
-
 					<!-- zoom -->
 					<div
 						class="my-btn my-btn-ghost"
@@ -576,6 +557,8 @@
 						<i class="material-symbols-outlined">zoom_in</i>
 					</div>
 
+
+
 					<div style="flex-grow: 1"></div>
 
 					<!-- print -->
@@ -584,7 +567,7 @@
 						@click="print"
 					>
 						<i
-							v-if="!rendering"
+							v-if="!renderingSample"
 							class="material-symbols-outlined"
 						>print</i>
 						<i
@@ -593,11 +576,37 @@
 						>progress_activity</i>
 					</div>
 
+					<div class="my-btn my-btn-ghost" style="justify-content: start;" @click="menuOpen = !menuOpen">
+						<template v-if="menuOpen">
+							<i class="material-symbols-outlined">left_panel_close</i>
+						</template>
+						<template v-else>
+							<i class="material-symbols-outlined">left_panel_open</i>
+						</template>
+					</div>
 
 				</div>
 
 				<div class="flex-scroll">
 
+					<div class="my-btn-group">
+						<div
+							class="my-btn btn-outline"
+							:active="!displayFull"
+							@click="displayFull = false"
+							style="width: 50%"
+						>
+							Sample
+						</div>
+						<div
+							class="my-btn btn-outline"
+							:active="displayFull"
+							@click="displayFull = true"
+							style="width: 50%"
+						>
+							Full
+						</div>
+					</div>
 
 					<details>
 						<summary>Content</summary>
@@ -651,171 +660,180 @@
 
 				</div>
 
-				<div style="flex-grow: 1"></div>
+				<!-- <div style="flex-grow: 1"></div> -->
 
-				<div class="bottom-controls">
-					<div class="my-btn my-btn-ghost" style="justify-content: start;" @click="menuOpen = !menuOpen">
-						<template v-if="menuOpen">
-							<i class="material-symbols-outlined">left_panel_close</i>
-							Hide
-						</template>
-						<template v-else>
-							<i class="material-symbols-outlined">left_panel_open</i>
-						</template>
-					</div>
-				</div>
+				<!-- <div class="bottom-controls">
+					
+				</div> -->
 
 			</div>
 
-			<div id="source">
-				<div
-					class="front-matter"
-					style="font-family: Montserrat, sans-serif"
-				>
-					<!-- TITLE PAGE -->
-					<div class="page-break">
-						<hr />
-						<div style="font-weight: bold; font-size: 18pt; margin-bottom: 10pt; text-align: right;">
-							Personal Study Notebook
-						</div>
 
-						<div style="font-weight: bold; font-size: 24pt; margin-bottom: 10pt; margin-top: 520pt">
-							October 2026
-						</div>
-						<div style="font-weight: bold; font-size: 48pt; margin-bottom: 10pt;">
-							General Conference
-						</div>
-						<hr />
-					</div>
-
-					<!-- blank for back of title page -->
-					<!-- <div class="page-break"></div> -->
-
-					<!-- TABLE OF CONTENTS -->
-					<div class="page-break">
-						<div
-							style="font-weight: bold; font-size: 20pt; margin-bottom: 20pt; border-bottom: 1px solid; padding-bottom: 10pt">
-							Table of Contents
-						</div>
-						<div id="tableOfContents">
-							<div
-								v-for="talk in talks"
-								style="display: flex; align-items: start; gap: 10pt; margin-bottom: 20pt; font-size: 11pt;"
-							>
-								<div>
-									<div style="aspect-ratio: 1; width: 14pt; background: #ddd; margin-top: 0t;"></div>
-								</div>
-								<div style="flex-grow: 1">{{talk.title}}</div>
-								<div style="flex-shrink: 0; width: 160pt">{{talk.author}}</div>
-								<div
-									:id="'pageNumber_'+talk.id"
-									style="flex-shrink: 0; width: 20pt; text-align: right;"
-								>--</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- TALKS -->
-				<div class="talks-wrapper">
-					<div id="startTalks"></div>
-
+			<div id="source-staging-area" class="offscreen">
+				<div id="sample-source">
 					<div
-						class="page-break talk-page"
-						v-for="talk in (fullExport ? talks : talks.slice(0, 1))"
+						class="front-matter"
+						style="font-family: Montserrat, sans-serif"
 					>
-						<div
-							class="talk-starter"
-							:id="talk.id"
-						></div>
-						<div class="doc-talkTitle">{{talk.title}}</div>
-						<div class="doc-talkAuthor">By {{talk.author}}</div>
-						<!-- <div class="doc-talkAuthorRole">{{talk.authorRole}}</div> -->
+						<!-- TITLE PAGE -->
+						<div class="page-break">
+							<hr />
+							<div style="font-weight: bold; font-size: 18pt; margin-bottom: 10pt; text-align: right;">
+								Personal Study Notebook
+							</div>
 
-						<div class="doc-talkKicker">{{talk.kicker}}</div>
+							<div style="font-weight: bold; font-size: 24pt; margin-bottom: 10pt; margin-top: 520pt">
+								October 2026
+							</div>
+							<div style="font-weight: bold; font-size: 48pt; margin-bottom: 10pt;">
+								General Conference
+							</div>
+							<hr />
+						</div>
 
-						<div class="talk-columns">
-							<div class="talkBody">
+						<!-- blank for back of title page -->
+						<!-- <div class="page-break"></div> -->
+
+						<!-- TABLE OF CONTENTS -->
+						<div class="page-break">
+							<div
+								style="font-weight: bold; font-size: 20pt; margin-bottom: 20pt; border-bottom: 1px solid; padding-bottom: 10pt">
+								Table of Contents
+							</div>
+							<div id="tableOfContents">
 								<div
-									v-for="section, i in talk.bodySections"
-									:class="['body-section', 'doc-'+section.type]"
+									v-for="talk in talks"
+									style="display: flex; align-items: start; gap: 10pt; margin-bottom: 20pt; font-size: 11pt;"
 								>
-									<!-- <small><small>{{section.type}}</small></small> -->
-									<div
-										v-if="section.type === 'section-header'"
-										:class="'doc-'+section.level"
-									><rich-text-nodes :nodes="section.nodes" /></div>
-
-									<div
-										v-if="section.type === 'paragraph'"
-										class="talk-paragraph"
-										:data-marker="section.paragraphNumber"
-									><rich-text-nodes :nodes="section.nodes" /></div>
-
-									<!-- <div v-if="section.type === 'image'">
-										<img :src="section.src"/>
-										<rich-text-nodes v-if="section.credit" :nodes="section.credit.nodes" />
-									</div> -->
-
-									<ol v-if="section.type === 'ol'" class="doc-list">
-										<li v-for="item in section.items"><rich-text-nodes :nodes="item.nodes" /></li>
-									</ol>
-
-									<ul v-if="section.type === 'ul'" class="doc-list">
-										<li v-for="item in section.items"><rich-text-nodes :nodes="item.nodes" /></li>
-									</ul>
-
-									<div v-if="section.type === 'poetry'">
-										<div
-											class="stanza"
-											v-for="stanza in section.stanzas"
-										>
-											<div
-												class="line"
-												v-for="line in stanza"
-											>
-												<rich-text-nodes :nodes="line.nodes" />
-											</div>
-										</div>
+									<div>
+										<div style="aspect-ratio: 1; width: 14pt; background: #ddd; margin-top: 0t;"></div>
 									</div>
+									<div style="flex-grow: 1">{{talk.title}}</div>
+									<div style="flex-shrink: 0; width: 160pt">{{talk.author}}</div>
+									<div
+										:class="'pageNumber_'+talk.id"
+										style="flex-shrink: 0; width: 20pt; text-align: right;"
+									>--</div>
 								</div>
 							</div>
+						</div>
+					</div>
 
-							<div
-								class="footnotes"
-								v-if="talk.notes.length"
-							>
-								<div>References</div>
-								<ol>
-									<li v-for="note in talk.notes">{{note.text}}</li>
-								</ol>
+					<!-- TALKS -->
+					<div class="talks-wrapper">
+						<div id="startTalks"></div>
+
+						<div
+							class="page-break talk-page"
+							v-for="talk in sampleTalks"
+						>
+							<talk-content :talk="talk" />
+						</div>
+					</div>
+				</div>
+
+
+
+				<div id="full-source">
+					<div
+						class="front-matter"
+						style="font-family: Montserrat, sans-serif"
+					>
+						<!-- TITLE PAGE -->
+						<div class="page-break">
+							<hr />
+							<div style="font-weight: bold; font-size: 18pt; margin-bottom: 10pt; text-align: right;">
+								Personal Study Notebook
 							</div>
+
+							<div style="font-weight: bold; font-size: 24pt; margin-bottom: 10pt; margin-top: 520pt">
+								October 2026
+							</div>
+							<div style="font-weight: bold; font-size: 48pt; margin-bottom: 10pt;">
+								General Conference
+							</div>
+							<hr />
+						</div>
+
+						<!-- blank for back of title page -->
+						<!-- <div class="page-break"></div> -->
+
+						<!-- TABLE OF CONTENTS -->
+						<div class="page-break">
+							<div
+								style="font-weight: bold; font-size: 20pt; margin-bottom: 20pt; border-bottom: 1px solid; padding-bottom: 10pt">
+								Table of Contents
+							</div>
+							<div id="tableOfContents">
+								<div
+									v-for="talk in talks"
+									style="display: flex; align-items: start; gap: 10pt; margin-bottom: 20pt; font-size: 11pt;"
+								>
+									<div>
+										<div style="aspect-ratio: 1; width: 14pt; background: #ddd; margin-top: 0t;"></div>
+									</div>
+									<div style="flex-grow: 1">{{talk.title}}</div>
+									<div style="flex-shrink: 0; width: 160pt">{{talk.author}}</div>
+									<div
+										:id="'pageNumber_'+talk.id"
+										style="flex-shrink: 0; width: 20pt; text-align: right;"
+									>--</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- TALKS -->
+					<div class="talks-wrapper">
+						<div id="startTalks"></div>
+
+						<div
+							class="page-break talk-page"
+							v-for="talk in talks"
+						>
+							<talk-content :talk="talk" />
 						</div>
 					</div>
 				</div>
 			</div>
 
 
-			<div class="left-side">
-				<div class="pages-wrapper">
+			<div class="pages-area relative">
+				<div
+					class="pages-wrapper "
+					:class="{ ...config }"
+				>
 					<div style="width: min-content; margin: 0 auto;"
 						:class="{ bookView }"
 					>
 						<div class="book-view-modifier">
 							<div
-								id="pages-insert"
-								:style="{ zoom, opacity: rendering ? 0.5 : 1 }"
-							></div>
+								id="zoom-modifier"
+								:style="{ zoom }"
+							>
+								<div id="sample-pages-insert" :class="{ offscreen: displayFull }"></div>
+								<div id="full-pages-insert" :class="{ offscreen: !displayFull }"
+									:style="{ opacity: renderingFull ? 0.5 : 1 }"
+								></div>
+							</div>
 						</div>
 
-						<template v-if="!fullExport">
-							<p class="my-4 text-center">Not all talks are shown in this preview</p>
-							<p class="my-4 text-center">Below is a sample talk demonstrating all possible talk elements.</p>
+						<template v-if="!displayFull">
+							<p class="my-4 text-center">Not all talks are shown in this sample document</p>
 						</template>
 
+						<div id="render-staging-area" class="offscreen">
+						</div>
 					</div>
 				</div>
+
+
+				<div v-if="renderingFull && displayFull" class="full-render-message absolute-center flex align-items-center justify-content-center gap-2">
+					<i class="material-symbols-outlined spin">progress_activity</i>
+					Updating the full document may take some time...
+				</div>
 			</div>
+
 		</div>
 	</div>
 
@@ -836,10 +854,86 @@
 	<script src="InlineTextStyle.js"></script>
 	<script src="RichTextNodes.js"></script>
 
+	<!-- TALK CONTENT COMPONENT -->
+	<script>
+		const TalkContent = {
+			components: { RichTextNodes },
+			template: '#talk-content-template',
+			props: ['talk']
+		};
+	</script>
+	<script type="text/x-template" id="talk-content-template">
+		<div
+			class="talk-starter"
+			:id="talk.id"
+		></div>
+		<div class="doc-talkTitle">{{talk.title}}</div>
+		<div class="doc-talkAuthor">By {{talk.author}}</div>
+		<!-- <div class="doc-talkAuthorRole">{{talk.authorRole}}</div> -->
+
+		<div class="doc-talkKicker">{{talk.kicker}}</div>
+
+		<div class="talk-columns">
+			<div class="talkBody" :data-talkid="talk.id">
+				<div
+					v-for="section, i in talk.bodySections"
+					:class="['body-section', 'doc-'+section.type]"
+					:data-section-number="section.sectionNumber"
+				>
+					<!-- <small><small>{{section.type}}</small></small> -->
+					<div
+						v-if="section.type === 'section-header'"
+						:class="'doc-'+section.level"
+					><rich-text-nodes :nodes="section.nodes" /></div>
+
+					<div
+						v-if="section.type === 'paragraph'"
+					><rich-text-nodes :nodes="section.nodes" /></div>
+
+					<div v-if="section.type === 'image'">
+						<img :src="section.src"/>
+						<rich-text-nodes v-if="section.credit" :nodes="section.credit.nodes" />
+					</div>
+
+					<ol v-if="section.type === 'ol'" class="doc-list doc-ol">
+						<li v-for="item in section.items"><rich-text-nodes :nodes="item.nodes" /></li>
+					</ol>
+
+					<ul v-if="section.type === 'ul'" class="doc-list doc-ul">
+						<li v-for="item in section.items"><rich-text-nodes :nodes="item.nodes" /></li>
+					</ul>
+
+					<div v-if="section.type === 'poetry'">
+						<div
+							class="stanza"
+							v-for="stanza in section.stanzas"
+						>
+							<div
+								class="line"
+								v-for="line in stanza"
+							>
+								<rich-text-nodes :nodes="line.nodes" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				class="footnotes"
+				v-if="talk.notes.length"
+			>
+				<div class="title">References</div>
+				<ol>
+					<li v-for="note in talk.notes">{{note.text}}</li>
+				</ol>
+			</div>
+		</div>
+	</script>
 
 	<script>
 		// before rendering, do some talk processing
-		for (const talk of talks) {
+		for (const talk of [...talks, testTalk]) {
 			// assign talk ID
 			talk.id = `${talk.author}${talk.title}`.toLowerCase().split(/[^a-z]/g).join('');
 			// number paragraphs
@@ -847,23 +941,38 @@
 			for (const section of talk.bodySections) {
 				if (section.type === 'paragraph') {
 					count++;
-					section.paragraphNumber = count;
+					section.sectionNumber = count;
 				}
 			}
 		}
 
+		let hasFirstRendered = false;
+
 		createApp({
-			components: { InlineTextStyle, RichTextNodes },
+			components: { InlineTextStyle, RichTextNodes, TalkContent },
 
 			data() {
 				return {
+					init: false, // just to keep the page bare until vue mounts to prevent flashing
+
 					talks,
-					zoom: 1,
+					testTalk,
+					zoom: window.innerWidth > 1200 ? 0.8 : window.innerWidth > 800 ? 0.5 : 0.4,
 					bookView: false,
-					rendering: false,
-					init: false,
-					menuOpen: true,
-					fullExport: false,
+					menuOpen: window.innerWidth > 800,
+					displayFull: false,
+
+					config: {
+						hideImages: true,
+						hideFootnotes: false,
+						hideSectionNumbers: false,
+						addBlankBehindCover: false,
+						addBlankBehindToc: false,
+						addBlankAfterAllTalks: false,
+						startTalksOnNewPage: true,
+
+						notesMarginWidth: 50,
+					},
 
 					talkDefaultStyles: {
 						fontFamily: "Montserrat",
@@ -877,12 +986,13 @@
 					},
 
 					styles: {
+
 						
 
 						talkStyles: [
 						{
 							label: 'Talk Title',
-							className: 'doc-talkTitle',
+							selector: '.doc-talkTitle',
 							style: {
 								fontFamily: "Montserrat",
 								fontSize: 17,
@@ -891,7 +1001,7 @@
 						},
 						{
 							label: 'Speaker',
-							className: 'doc-talkAuthor',
+							selector: '.doc-talkAuthor',
 							style: {
 								display: 'inline-block',
 								fontFamily: "Cormorant Garamond",
@@ -903,7 +1013,7 @@
 						},
 						{
 							label: 'Speaker role',
-							className: 'doc-talkAuthorRole',
+							selector: '.doc-talkAuthorRole',
 							style: {
 								marginLeft: 5,
 								display: 'inline-block',
@@ -913,7 +1023,7 @@
 						},
 						{
 							label: 'Talk summary',
-							className: 'doc-talkKicker',
+							selector: '.doc-talkKicker',
 							style: {
 								fontFamily: "Cormorant Garamond",
 								fontSize: 12,
@@ -924,11 +1034,10 @@
 								borderBottom: '1pt solid #888',
 								padding: '8pt 0'
 							}
-
 						},
 						{
 							label: 'Section heading',
-							className: 'doc-H2',
+							selector: '.doc-H2',
 							style: {
 								fontFamily: "Montserrat",
 								fontSize: 12,
@@ -939,7 +1048,7 @@
 						},
 						{
 							label: 'Subsection heading',
-							className: 'doc-H3',
+							selector: '.doc-H3',
 							style: {
 								fontFamily: "Montserrat",
 								fontSize: 13,
@@ -950,7 +1059,7 @@
 						},
 						{
 							label: 'Paragraphs',
-							className: 'doc-paragraph',
+							selector: '.doc-paragraph',
 							style: {
 								fontFamily: '',
 								fontSize: '',
@@ -964,7 +1073,7 @@
 						},
 						{
 							label: 'Poetry',
-							className: 'doc-poetry',
+							selector: '.doc-poetry',
 							style: {
 								fontFamily: '',
 								fontSize: '',
@@ -973,12 +1082,14 @@
 								lineHeight: '',
 								textAlign: "",
 								marginBottom: 10,
-								marginTop: 0
+								marginTop: 0,
+								marginLeft: 20,
+								marginRight: 15,
 							}
 						},
 						{
 							label: 'Lists',
-							className: 'doc-list',
+							selector: '.doc-list',
 							style: {
 								fontFamily: '',
 								fontSize: '',
@@ -987,7 +1098,35 @@
 								lineHeight: '',
 								textAlign: "",
 								marginBottom: 10,
-								marginTop: 0
+								marginTop: 0,
+								marginLeft: 20,
+								marginRight: 15,
+							}
+						},
+						{
+							label: 'Footnotes title',
+							selector: '.footnotes .title',
+							style: {
+								fontFamily: '',
+								fontSize: '',
+								fontWeight: '',
+								color: "",
+								lineHeight: '',
+								textAlign: "",
+								marginBottom: 10,
+							}
+						},
+						{
+							label: 'Footnotes items',
+							selector: '.footnotes .title',
+							style: {
+								fontFamily: '',
+								fontSize: '',
+								fontWeight: '',
+								color: "",
+								lineHeight: '',
+								textAlign: "",
+								marginBottom: 5,
 							}
 						},
 		// Optional additions for remaining classes (doc-poetry, etc.) if needed later:
@@ -995,7 +1134,7 @@
 		/*
 		{
 			label: 'Poetry',
-			className: 'doc-poetry',
+			selector: '.doc-poetry',
 			style: {
 				margin: '0 20pt 10pt 20pt'
 			}
@@ -1003,15 +1142,33 @@
 		{
 			label: 'List (ul/ol)',
 			// Note: Styling for universal elements like lists often requires handling CSS selectors outside of object style props.
-			className: 'doc-list', 
+			selector: '.doc-list', 
 			style: {
-				marginRight: 20 // Combined margin right
+				
+			'
+			marginRight: 20 // Combined margin right
 			}
 		},
 		*/
 					]},
+
+
+					hasFirstRendered: false,
+					renderBouncedAt: 0,
+					renderingSample: false,
+					rerenderSampleWaiting: false,
+
+					renderingFull: false,
+					rerenderFullWaiting: false,
 				};
 			},
+
+			computed: {
+				sampleTalks() {
+					return [this.talks[0], testTalk];
+				}
+			},
+
 			watch: {
 				styles: {
 					deep: true,
@@ -1025,10 +1182,16 @@
 						this.updatePreviewStyles();
 					},
 				},
+				config: {
+					deep: true,
+					handler() {
+						this.renderSamplePreview();
+					},
+				},
 			},
 
 			mounted() {
-				this.renderPreview();
+				this.updatePreviewStyles();
 				window.addEventListener('keydown', (event) => {
 					if (event.key === 'p') {
 						event.preventDefault();
@@ -1040,111 +1203,125 @@
 
 			methods: {
 				updatePreviewStyles() {
-					const css = Array.from(Object.values(this.styles)).flat()
-						.map(({ className, style: config }) => {
-							// Map config keys to CSS class names:
-							// talkTitle -> .doc-talkTitle, body -> .doc-body
+					let css = Array.from(Object.values(this.styles)).flat()
+						.map(({ selector, style: config }) => {
 							return `
-          #pages-insert .${className} {
-            font-family: ${JSON.stringify(config.fontFamily || this.talkDefaultStyles.fontFamily)};
-            font-size: ${config.fontSize || this.talkDefaultStyles.fontSize || 14}pt;
-            font-weight: ${config.fontWeight || this.talkDefaultStyles.fontWeight};
-            font-style: ${config.fontStyle || this.talkDefaultStyles.fontStyle};
-            color: ${config.color || this.talkDefaultStyles.color};
-            line-height: ${config.lineHeight || this.talkDefaultStyles.lineHeight};
-            text-align: ${config.textAlign || this.talkDefaultStyles.textAlign};
-            letter-spacing: ${config.letterSpacing || this.talkDefaultStyles.letterSpacing}%;
-            margin-top: ${config.marginTop}pt;
-            margin-bottom: ${config.marginBottom}pt;
-          }
+		.pages-wrapper ${selector} {
+			font-family: ${JSON.stringify(config.fontFamily || this.talkDefaultStyles.fontFamily)};
+			font-size: ${config.fontSize || this.talkDefaultStyles.fontSize || 14}pt;
+			font-weight: ${config.fontWeight || this.talkDefaultStyles.fontWeight};
+			font-style: ${config.fontStyle || this.talkDefaultStyles.fontStyle};
+			color: ${config.color || this.talkDefaultStyles.color};
+			line-height: ${config.lineHeight || this.talkDefaultStyles.lineHeight};
+			text-align: ${config.textAlign || this.talkDefaultStyles.textAlign};
+			letter-spacing: ${config.letterSpacing || this.talkDefaultStyles.letterSpacing}%;
+			margin-top: ${config.marginTop}pt;
+			margin-bottom: ${config.marginBottom}pt;
+			margin-left: ${config.marginLeft}pt;
+			margin-right: ${config.marginRight}pt;
+		}
         `;
 						})
 						.join("\n");
 
+					css = css.concat(`
+		.pages-wrapper {
+			--notes-margin-width: ${this.config.notesMarginWidth}mm;
+		}
+					`)
+
 					document.querySelector("#generated-text-css").textContent = css;
+
+					this.renderSamplePreview();
 				},
 
-				async renderPreview() {
-					this.rendering = true;
-					await this.$nextTick();
-					this.updatePreviewStyles();
+				async renderSamplePreview() {
+					// wait first to check that no new requests have come in before continuing
+					// only if already first rendered
 
-					const pagesInsertEl = document.getElementById("pages-insert");
-
-					await renderPagedJsPages(pagesInsertEl);
-
-					// compute page numbers!
-					const renderedPages = [...pagesInsertEl.querySelectorAll(".pagedjs_pagebox")];
-
-					let hasStartedTalks = false;
-					let talksStartIdx = 0;
-					const pageNumbers = {};
-
-					for (const i in renderedPages) {
-						const idx = Number(i);
-						const pageEl = renderedPages[idx];
-						if (!hasStartedTalks) {
-							hasStartedTalks = Boolean(pageEl.querySelector("#startTalks"));
-							if (hasStartedTalks) {
-								talksStartIdx = idx;
-							}
+					if (this.hasFirstRendered) {
+						const bouncedAt = Date.now();
+						this.renderBouncedAt = bouncedAt;
+						await new Promise(res => setTimeout(res, 1000));
+						if (this.renderBouncedAt !== bouncedAt) {
+							console.log('debounced render');
+							return;
 						}
-						if (hasStartedTalks) {
-							// mark as talks portion of doc
-							pageEl.classList.add('contains-talk');
-
-							//compute page number from talks start
-							const pageNumber = idx + 1;
-							// const numberEl = document.createElement('div');
-							// numberEl.className = 'pageNumber';
-							// numberEl.textContent = pageNumber;
-
-							// pageEl.appendChild(numberEl);
-
-							// assign page number to talk
-							const talkStart = pageEl.querySelector('.talk-starter');
-							if (talkStart) {
-								const id = talkStart.id;
-								// pageNumbers[id] = pageNumber;
-								const tocEl = pagesInsertEl.querySelector('#pageNumber_' + id);
-								tocEl.textContent = pageNumber;
-							}
-						}
+						console.log("continuing render")
 					}
 
 
-					// // insert table of contents!
-					// const toc = document.querySelector(".pagedjs_area #tableOfContents");
+					// If a render is already ongoing, set a flag to come back when finished
+					if (this.renderingSample) {
+						this.rerenderSampleWaiting = true;
+						console.log("will render again when finished");
+						return;
+					}
 
-					// const list = document.createElement("div");
-					// list.className = 'toc-list';
+					this.renderingSample = true;
+					await this.renderPreview(false);
+					this.renderingSample = false;
+					this.hasFirstRendered = true;
 
-					// // for (const talk of this.talks) {
-					// // 	const item = document.createElement("div");
-					// // 	item.className = 'toc-item';
-
-					// // 	const title = document.createElement("a");
-					// // 	// link.href = `#${talk.id}`;
-					// // 	title.textContent = talk.title;
-
-					// // 	const author = document.createElement("a");
-					// // 	author.textContent = talk.author;
-
-					// // 	// const spacer = document.createElement("div");
-					// // 	// spacer.className = 'toc-spacer';
-
-					// // 	const pageNumber = pageNumbers[talk.id];
-					// // 	item.append(title, author, document.createTextNode(pageNumber || ''));
-					// // 	list.append(item);
-					// // }
-
-					// toc.replaceChildren(list);
-
-					this.rendering = false;
+					// If we need to render preview again because of some update, do it now
+					if (this.rerenderSampleWaiting) {
+						this.rerenderSampleWaiting = false;
+						this.renderSamplePreview();
+						return;
+					}
+					// otherwise, kick of a background full export render
+					else this.renderFullPreview();
 				},
 
+
+				async renderFullPreview() {
+					// If a render is already ongoing, set a flag to come back when finished
+					if (this.renderingFull) {
+						this.rerenderFullWaiting = true;
+						console.log("will render again when finished");
+						return;
+					}
+
+					this.renderingFull = true;
+					await nextTick();
+					await this.renderPreview(true);
+					this.renderingFull = false;
+
+					// If we need to render preview again because of some update, do it now
+					if (this.rerenderFullWaiting) {
+						this.rerenderFullWaiting = false;
+						this.renderFullPreview();
+					}
+				},
+
+
+
+				async renderPreview(asFull = false) {
+					const sourceId = asFull ? 'full-source' : 'sample-source';
+					const targetId = asFull ? 'full-pages-insert' : 'sample-pages-insert';
+					await renderPagedJsPages(sourceId, targetId);
+					await this.computePageNumbers(targetId);
+				},
+
+				async computePageNumbers(targetId) {
+					this.computingPageNumbers = true;
+					const pages = document.querySelectorAll(`#${targetId} .pagedjs_page`);
+					for (const page of pages) {
+						await new Promise(res => setTimeout(res, 10)); // small wait to release main thread
+
+						// update TOC page numbers
+						const talkStart = page.querySelector('.talk-starter');
+						if (talkStart) {
+							const id = talkStart.id;
+							const tocEl = document.querySelector(`#${targetId} .pageNumber_` + id);
+							if (tocEl) tocEl.textContent = page.dataset['pageNumber'];
+						}
+					}
+				},
+
+
 				print() {
-					if (this.rendering) {
+					if (this.renderingFull) {
 						alert("Cannot print while rendering pages!");
 						return;
 					}
@@ -1153,13 +1330,25 @@
 			},
 		}).mount("#app");
 
-		async function renderPagedJsPages(targetEl) {
+		async function renderPagedJsPages(sourceId, targetId) {
 			try {
-				const source = document.querySelector("#source");
+				const pagesInsertEl = document.getElementById(targetId);
+				const hasFirstRendered = Boolean(pagesInsertEl.querySelector('.pagedjs_pages'));
 
-				targetEl.replaceChildren();
-				await window.PagedPolyfill.preview(source.innerHTML, ["./pages.css"], targetEl);
+				const source = document.getElementById(sourceId);
+				const stagingArea = document.getElementById('render-staging-area');
 
+				const renderSpace = document.createElement('div');
+				stagingArea.appendChild(renderSpace);
+
+				const previewer = new window.Paged.Previewer(window.PagedPolyfill.settings);
+
+				await previewer.preview(source.innerHTML, ["./pages.css"], hasFirstRendered ? renderSpace : pagesInsertEl);
+
+				if (hasFirstRendered) {
+					pagesInsertEl.innerHTML = renderSpace.innerHTML;
+				}
+				renderSpace.remove();
 			} catch (error) {
 				console.error("Paged.js preview failed:", error);
 			}
