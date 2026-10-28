@@ -277,11 +277,6 @@
 			outline: none;
 		}
 
-		#pages-insert {
-			font-family: "EB Garamond", serif;
-			font-size: 17px;
-		}
-
 		.pagedjs_page {
 			background: white;
 			box-shadow: 0 2px 8px #0002;
@@ -292,12 +287,12 @@
 
 		.talk-page {
 			page: talks;
-			width: calc(100% - 43mm);
+			width: calc(100% - 40mm);
 		}
 
 		/* NOTE MARGINS */
-		.pagedjs_page:nth-of-type(even) .pagedjs_pagebox.contains-talk .talk-page {
-			margin-left: 43mm;
+		.pagedjs_page:nth-of-type(even) .pagedjs_pagebox .talk-page {
+			margin-left: 40mm;
 		}
 
 		.pagedjs_page:nth-of-type(odd) .pagedjs_pagebox.contains-talk {}
@@ -384,9 +379,23 @@
 
 
 		/* DOC ELEMENT STYLES */
+
+		.page-cover-wrapper {
+			outline: 2px dashed #eee;
+			position: absolute;
+			background-repeat: no-repeat;
+		}
+
+
+
+		.talks-wrapper {
+			font-family: "EB Garamond", serif;
+			font-size: 14pt;
+		}
+
 		.doc-talkTitle {
 			font-family: "Montserrat", sans-serif;
-			font-size: 17pt;
+			font-size: 18pt;
 			font-weight: 500;
 			color: #222222;
 			line-height: 1.2;
@@ -396,7 +405,7 @@
 		.doc-talkAuthor {
 			display: inline-block;
 			font-family: "Cormorant Garamond", serif;
-			font-size: 11pt;
+			font-size: 12pt;
 			font-weight: 400;
 			color: #222222;
 			line-height: 1.2;
@@ -456,8 +465,6 @@
 		}
 
 		.doc-paragraph {
-			font-family: inherit;
-			font-size: inherit;
 			font-weight: 400;
 			color: #222222;
 			line-height: 1.2;
@@ -483,14 +490,14 @@
 		.footnotes {
 			margin-top: 20pt;
 		}
-
+         
 		.footnotes ol {
 			margin: 0;
-			margin-top: 10pt;
+			margin-top: 5pt;
 		}
 
 		.footnotes li {
-			margin: 5pt 0;
+			margin: 0pt 0;
 			font-size: 12pt;
 		}
 
@@ -511,6 +518,11 @@
 			.view-settings,
 			.controls {
 				display: none !important;
+			}
+
+
+			.page-cover-wrapper {
+				outline: none;
 			}
 
 			/* Show only the rendered Paged.js pages */
@@ -548,7 +560,7 @@
 
 	<div id="app">
 
-		<div class="layout" :class="{init}">
+		<div class="layout" :class="{init}" v-if="config">
 
 			<div class="controls" :class="{menuOpen}">
 				<div class="view-settings">
@@ -654,6 +666,41 @@
 						</div>
 					</details>
 
+
+
+					<details>
+						<summary>Front Cover</summary>
+						<div>
+							<div>
+								<label for="frontCoverImage">
+									<input type="checkbox" id="frontCoverImage" v-model="config.frontCoverImage.enabled" />
+									<span>Upload picture</span>
+								</label>
+							</div>
+							<div v-if="config.frontCoverImage.enabled">
+								<img v-if="config.frontCoverImage.url?.startsWith('data:')" style="width: 10rem" :src="config.frontCoverImage.url" />
+								<input type="file" :onchange="(event) => setCoverImage('frontCoverImage', event.target.files)" />
+							</div>
+						</div>
+					</details>
+
+
+					<details>
+						<summary>Rear Cover</summary>
+						<div>
+							<div>
+								<label for="rearCoverImage">
+									<input type="checkbox" id="rearCoverImage" v-model="config.rearCoverImage.enabled" />
+									<span>Upload picture</span>
+								</label>
+							</div>
+							<div v-if="config.rearCoverImage.enabled">
+								<img v-if="config.rearCoverImage.url?.startsWith('data:')" style="width: 10rem" :src="config.rearCoverImage.url" />
+								<input type="file" :onchange="(event) => setCoverImage('rearCoverImage', event.target.files)" />
+							</div>
+						</div>
+					</details>
+
 				</div>
 
 				<div style="flex-grow: 1"></div>
@@ -679,18 +726,27 @@
 				>
 					<!-- TITLE PAGE -->
 					<div class="page-break">
-						<hr />
-						<div style="font-weight: bold; font-size: 18pt; margin-bottom: 10pt; text-align: right;">
-							Personal Study Notebook
-						</div>
+						<template v-if="config.frontCoverImage.enabled">
+							<div
+								class="page-cover-wrapper front-cover"
+							>
 
-						<div style="font-weight: bold; font-size: 24pt; margin-bottom: 10pt; margin-top: 520pt">
-							October 2026
-						</div>
-						<div style="font-weight: bold; font-size: 48pt; margin-bottom: 10pt;">
-							General Conference
-						</div>
-						<hr />
+							</div>
+						</template>
+						<template v-else>
+							<hr />
+							<div style="font-weight: bold; font-size: 18pt; margin-bottom: 10pt; text-align: right;">
+								Personal Study Notebook
+							</div>
+
+							<div style="font-weight: bold; font-size: 24pt; margin-bottom: 10pt; margin-top: 520pt">
+								October 2026
+							</div>
+							<div style="font-weight: bold; font-size: 48pt; margin-bottom: 10pt;">
+								General Conference
+							</div>
+							<hr />
+						</template>
 					</div>
 
 					<!-- blank for back of title page -->
@@ -699,7 +755,7 @@
 					<!-- TABLE OF CONTENTS -->
 					<div class="page-break">
 						<div
-							style="font-weight: bold; font-size: 20pt; margin-bottom: 20pt; border-bottom: 1px solid; padding-bottom: 10pt">
+							style="font-weight: bold; font-size: 20pt; margin-bottom: 20pt; border-bottom: 1pt solid; padding-bottom: 10pt">
 							Table of Contents
 						</div>
 						<div id="tableOfContents">
@@ -713,7 +769,7 @@
 								<div style="flex-grow: 1">{{talk.title}}</div>
 								<div style="flex-shrink: 0; width: 160pt">{{talk.author}}</div>
 								<div
-									:id="'pageNumber_'+talk.id"
+									:class="'pageNumber_'+talk.id"
 									style="flex-shrink: 0; width: 20pt; text-align: right;"
 								>--</div>
 							</div>
@@ -801,7 +857,19 @@
 
 
 				<!-- blank for back page -->
-				<div class="page-break"></div>
+				<!-- if the cover lands on the right side of the book, or the front of a page, push it one more  -->
+				<div class="page-break-right">
+					<div class="rear-cover">
+						<template v-if="config.frontCoverImage.enabled">
+							<div
+								class="page-cover-wrapper rear-cover"
+							>
+
+							</div>
+						</template>
+					</div>
+
+				</div>
 			</div>
 
 
@@ -914,6 +982,10 @@
 					rendering: false,
 					init: false,
 					menuOpen: true,
+
+					currentConfigId: 1,
+					config: {},
+
 					// fontFamily: "Arial",
 					// fontSize: 12,
 					// pageMargin: "1in",
@@ -989,12 +1061,23 @@
 				styles: {
 					deep: true,
 					handler() {
-						this.renderPreview();
+						this.updatePreviewStyles();
+					},
+				},
+				config: {
+					deep: true,
+					handler() {
+						this.saveConfig();
+						this.updatePreviewStyles();
 					},
 				},
 			},
 
+			beforeMount() {
+				this.loadConfig();
+			},
 			mounted() {
+				this.updatePreviewStyles();
 				this.renderPreview();
 				window.addEventListener('keydown', (event) => {
 					if (event.key === 'p') {
@@ -1007,27 +1090,41 @@
 
 			methods: {
 				updatePreviewStyles() {
-					const css = Object.entries(this.styles)
+					let css = Object.entries(this.styles)
 						.map(([name, config]) => {
 							// Map config keys to CSS class names:
 							// talkTitle -> .doc-talkTitle, body -> .doc-body
 							const className = `doc-${name}`;
 
 							return `
-          #pages-insert .${className} {
-            font-family: ${JSON.stringify(config.fontFamily)};
-            font-size: ${Number(config.fontSize)}pt;
-            font-weight: ${Number(config.fontWeight)};
-            font-style: ${config.fontStyle};
-            color: ${config.color};
-            line-height: ${Number(config.lineHeight)};
-            text-align: ${config.textAlign};
-            margin-top: ${Number(config.marginTop)};
-            margin-bottom: ${Number(config.marginBottom)};
-          }
-        `;
+								#pages-insert .${className} {
+									font-family: ${JSON.stringify(config.fontFamily)};
+									font-size: ${Number(config.fontSize)}pt;
+									font-weight: ${Number(config.fontWeight)};
+									font-style: ${config.fontStyle};
+									color: ${config.color};
+									line-height: ${Number(config.lineHeight)};
+									text-align: ${config.textAlign};
+									margin-top: ${Number(config.marginTop)};
+									margin-bottom: ${Number(config.marginBottom)};
+								}
+							`;
 						})
 						.join("\n");
+
+					css += ['frontCoverImage', 'rearCoverImage'].map(key => {
+						const config = this.config[key];
+						const selector = key === 'frontCoverImage' ? '.front-cover' : '.rear-cover';
+
+						return `
+							${selector} {
+								inset: ${config.inset};
+								background-position: ${config.backgroundPosition};
+								background-size: ${config.backgroundSize};
+								background-image: url('${config.url}');
+							}
+						`;
+					}).join('\n');
 
 					document.querySelector("#generated-text-css").textContent = css;
 				},
@@ -1035,7 +1132,6 @@
 				async renderPreview() {
 					this.rendering = true;
 					await this.$nextTick();
-					this.updatePreviewStyles();
 
 					const pagesInsertEl = document.getElementById("pages-insert");
 
@@ -1059,7 +1155,7 @@
 						}
 						if (hasStartedTalks) {
 							// mark as talks portion of doc
-							pageEl.classList.add('contains-talk');
+							// pageEl.classList.add('contains-talk');
 
 							//compute page number from talks start
 							const pageNumber = idx + 1;
@@ -1074,7 +1170,7 @@
 							if (talkStart) {
 								const id = talkStart.id;
 								// pageNumbers[id] = pageNumber;
-								const tocEl = pagesInsertEl.querySelector('#pageNumber_' + id);
+								const tocEl = pagesInsertEl.querySelector('.pageNumber_' + id);
 								tocEl.textContent = pageNumber;
 							}
 						}
@@ -1117,6 +1213,59 @@
 						return;
 					}
 					window.print();
+				},
+
+				setCoverImage(destination, files) {
+					const file = files[0];
+					if (!file) {
+						console.warn("No file provided");
+						return;
+					}
+					
+					// 1. Initialize the FileReader
+					const reader = new FileReader();
+					let ctx = this;
+
+					// 2. Set up what happens when the file is successfully read
+					reader.onload = function(event) {
+						// event.target.result contains the Data URL string
+						ctx.config[destination].url = event.target.result;
+					};
+
+					// 5. Read the file as a Data URL
+					// This is the core command that executes the reading process
+					reader.readAsDataURL(file);
+				},
+
+				saveConfig() {
+					const savedConfigs = JSON.parse(localStorage.getItem('notebook_configs') || '{}');
+					savedConfigs[this.currentConfigId] = this.config;
+					localStorage.setItem('notebook_configs', JSON.stringify(savedConfigs));
+				},
+
+				loadConfig() {
+					// default id for now
+					const configId = 1;
+					const savedConfigs = JSON.parse(localStorage.getItem('notebook_configs') || '{}');
+					this.currentConfigId = configId;
+					this.config = savedConfigs[this.currentConfigId] || {
+						name: 'My notebook',
+						frontCoverImage: {
+							enabled: true,
+							inset: '-50pt',
+							url: 'https://assets.ldscdn.org/96/79/96794781c0734ad03e74e29cbb3697247a6936db/general_conference_notebook_cover.jpeg',
+							backgroundPosition: '50% 50%',
+							backgroundSize: '50% 50%',
+						},
+						rearCoverImage: {
+							enabled: true,
+							inset: '-50pt',
+							url: 'https://assets.ldscdn.org/96/79/96794781c0734ad03e74e29cbb3697247a6936db/general_conference_notebook_cover.jpeg',
+							backgroundPosition: '50% 50%',
+							backgroundSize: '50% 50%',
+						},
+					};
+					console.log(this.config)
 				}
 			},
 		}).mount("#app");
@@ -1126,7 +1275,8 @@
 				const source = document.querySelector("#source");
 
 				targetEl.replaceChildren();
-				await window.PagedPolyfill.preview(source.innerHTML, ["./pages.css"], targetEl);
+				const previewer = new window.Paged.Previewer(window.PagedPolyfill.settings);
+				await previewer.preview(source.innerHTML, ["./pages.css"], targetEl);
 
 			} catch (error) {
 				console.error("Paged.js preview failed:", error);

@@ -32,3 +32,6 @@
 .page-break {
   break-after: page;
 }
+ .page-break-right {
+  break-after: left;
+}
