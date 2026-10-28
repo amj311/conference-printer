@@ -370,7 +370,7 @@
 
 				<div class="flex-scroll">
 
-					<div class="my-btn-group">
+					<div class="my-btn-group mb-3">
 						<div
 							class="my-btn btn-outline"
 							:active="!displayFull"
@@ -609,10 +609,14 @@
 					</div>
 				</div>
 
-
 				<div v-if="renderingFull && displayFull" class="full-render-message absolute-center flex align-items-center justify-content-center gap-2">
 					<div><i class="material-symbols-outlined spin">progress_activity</i></div>
 					Updating the full document may take some time...
+				</div>
+
+				<div v-if="isPrinting" class="full-render-message absolute-center flex align-items-center justify-content-center gap-2">
+					<div><i class="material-symbols-outlined spin">progress_activity</i></div>
+					Exporting print document...
 				</div>
 			</div>
 
@@ -743,6 +747,7 @@
 					bookView: false,
 					menuOpen: window.innerWidth > 800,
 					displayFull: false,
+					isPrinting: false,
 
 					config: {
 						hideImages: true,
@@ -900,7 +905,7 @@
 						},
 						{
 							label: 'Footnotes items',
-							selector: '.footnotes .title',
+							selector: '.footnotes li',
 							style: {
 								fontFamily: '',
 								fontSize: '',
@@ -988,28 +993,28 @@
 					let css = Array.from(Object.values(this.styles)).flat()
 						.map(({ selector, style: config }) => {
 							return `
-		.pages-wrapper ${selector} {
-			font-family: ${JSON.stringify(config.fontFamily || this.talkDefaultStyles.fontFamily)};
-			font-size: ${config.fontSize || this.talkDefaultStyles.fontSize || 14}pt;
-			font-weight: ${config.fontWeight || this.talkDefaultStyles.fontWeight};
-			font-style: ${config.fontStyle || this.talkDefaultStyles.fontStyle};
-			color: ${config.color || this.talkDefaultStyles.color};
-			line-height: ${config.lineHeight || this.talkDefaultStyles.lineHeight};
-			text-align: ${config.textAlign || this.talkDefaultStyles.textAlign};
-			letter-spacing: ${config.letterSpacing || this.talkDefaultStyles.letterSpacing}%;
-			margin-top: ${config.marginTop}pt;
-			margin-bottom: ${config.marginBottom}pt;
-			margin-left: ${config.marginLeft}pt;
-			margin-right: ${config.marginRight}pt;
-		}
-        `;
+								.pages-wrapper ${selector} {
+									font-family: ${JSON.stringify(config.fontFamily || this.talkDefaultStyles.fontFamily)};
+									font-size: ${config.fontSize || this.talkDefaultStyles.fontSize || 14}pt;
+									font-weight: ${config.fontWeight || this.talkDefaultStyles.fontWeight};
+									font-style: ${config.fontStyle || this.talkDefaultStyles.fontStyle};
+									color: ${config.color || this.talkDefaultStyles.color};
+									line-height: ${config.lineHeight || this.talkDefaultStyles.lineHeight};
+									text-align: ${config.textAlign || this.talkDefaultStyles.textAlign};
+									letter-spacing: ${config.letterSpacing || this.talkDefaultStyles.letterSpacing}%;
+									margin-top: ${config.marginTop}pt;
+									margin-bottom: ${config.marginBottom}pt;
+									margin-left: ${config.marginLeft}pt;
+									margin-right: ${config.marginRight}pt;
+								}
+								`;
 						})
 						.join("\n");
 
 					css = css.concat(`
-		.pages-wrapper {
-			--notes-margin-width: ${this.config.notesMarginWidth}mm;
-		}
+						.pages-wrapper {
+							--notes-margin-width: ${this.config.notesMarginWidth}mm;
+						}
 					`)
 
 					document.querySelector("#generated-text-css").textContent = css;
@@ -1107,12 +1112,16 @@
 				},
 
 
-				print() {
+				async print() {
 					if (this.renderingFull) {
 						alert("Cannot print while rendering pages!");
 						return;
 					}
+					this.isPrinting = true;
+					await new Promise((res) => setTimeout(res, 1000));
 					window.print();
+					await new Promise((res) => setTimeout(res, 1000));
+					this.isPrinting = false;
 				}
 			},
 		}).mount("#app");
@@ -1150,7 +1159,7 @@
 			display: flex;
 			flex-wrap: wrap;
 			align-items: end;
-			gap: 8px;
+			gap: 4px;
 		}
 
 		.text-style-control .btn.join-item {
@@ -1334,7 +1343,6 @@
 		.footnotes li {
 			display: list-item;
 			margin: 5pt 0;
-			font-size: 12pt;
 		}
 
 
@@ -1371,6 +1379,14 @@
 				margin: 0 !important;
 				overflow: visible !important;
 				padding: 0;
+			}
+
+			.sample-pages-insert {
+				display: none;
+			}
+
+			.sample-pages-insert.offscreen {
+				position: static;
 			}
 
 			/* Each Paged.js page should print as one sheet */

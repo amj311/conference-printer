@@ -60,7 +60,7 @@ const InlineTextStyle = {
 				<option :value="''">Default</option> 
 
 				<!-- Options from 10 to 30 (inclusive) -->
-				<option v-for="size of Array.from({length: 61}).map((_,i) => i+10)" :key="size" :value="size">{{ size }}pt</option>
+				<option v-for="size of Array.from({length: 66}).map((_,i) => i+5)" :key="size" :value="size">{{ size }}pt</option>
 			</select>
 
 
