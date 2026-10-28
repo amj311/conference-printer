@@ -64,6 +64,8 @@
 			font-size: 15px;
 		
 			--controls-padding: 1rem;
+
+			--page-margin: 0.75in;
 		}
 	</style>
 
@@ -299,227 +301,6 @@
 	</style>
 
 	
-	<style> /* PAGES */
-
-		.offscreen {
-			position: fixed;
-			translate: 100vw;
-			user-select: none;
-			opacity: 0;
-			min-height: 100vh;
-			outline: none;
-		}
-
-		/* PREVIEW */
-
-		#source-staging-area {
-		}
-
-		#render-staging-area {
-		}
-
-		.pagedjs_page {
-			background: white;
-			box-shadow: 0 2px 8px #0002;
-			margin: 16px auto;
-		}
-
-
-		.talk-page {
-			page: talks;
-			width: calc(100% - var(--notes-margin-width));
-		}
-
-		/* NOTE MARGINS */
-		.pagedjs_page:nth-of-type(even) .pagedjs_pagebox .talk-page {
-			margin-left: var(--notes-margin-width);
-		}
-
-		/* PRINT PREVIEW */
-		.bookView .book-view-modifier {
-			zoom: 0.5;
-		}
-
-		.bookView .pagedjs_pages {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-		}
-
-		.bookView .pagedjs_pages::before {
-			content: '';
-		}
-
-
-		/* TABLE OF CONTENTS */
-		.toc-list {
-			display: flex;
-			flex-direction: column;
-			gap: 2pt;
-		}
-
-		.toc-item {
-			display: flex;
-			gap: 10pt;
-		}
-
-		.toc-spacer {
-			flex-grow: 1;
-			border-bottom: 1pt dotted #888;
-		}
-
-		.talk-columns {
-			/* columns: 2; */
-			column-gap: 0.35in;
-		}
-
-		/* NUMBERED TALK SECTIONS */
-		.body-section {
-			position: relative;
-		}
-
-		.body-section::before {
-			content: attr(data-section-number);
-			position: absolute;
-			top: 0;
-			left: 0;
-			padding-right: 0.5rem;
-			translate: -100%;
-			opacity: .5;
-			transform: scale(0.8);
-		}
-
-		/* RICH TEXT NODES */
-
-		.p-text-node .I {
-			font-style: italic;
-		}
-
-		.p-text-node .EM {
-			font-style: italic;
-		}
-
-		.p-text-node .CITE {
-			font-style: italic;
-		}
-
-		.p-text-node .STRONG {
-			font-weight: bold;
-		}
-
-
-		/* DOC ELEMENT STYLES */
-		.doc-talkTitle {
-		}
-
-		.doc-talkAuthor {
-			text-transform: uppercase;
-		}
-
-		.doc-talkAuthorRole {
-		}
-
-		.doc-talkKicker {
-			border-top: 1pt solid #888;
-			border-bottom: 1pt solid #888;
-			padding: 8pt 0;
-		}
-
-		.doc-H2 {
-		}
-
-		.doc-H3 {
-		}
-
-		.doc-paragraph {
-		}
-
-		.doc-poetry {
-		}
-
-		.doc-ul {
-			list-style: disc;
-		    padding-left: 1em;
-		}
-		.doc-ol {
-			list-style: decimal;
-		    padding-left: 1em;
-		}
-
-		.doc-ul li,
-		.doc-ol li {
-			margin: 10pt 0;
-			display: list-item;
-		}
-
-		.hideImages .doc-image {
-			display: none;
-		}
-
-		.footnotes ol {
-			list-style: decimal;
-		    padding-left: 1em;
-			margin: 0;
-			margin-bottom: 5pt;
-		}
-
-		.footnotes li {
-			display: list-item;
-			margin: 5pt 0;
-			font-size: 12pt;
-		}
-
-
-		/* PRINTING */
-		@media print {
-
-			/* Make sure we scroll */
-			body,
-			.layout,
-			.pages-area,
-			.pages-wrapper {
-				overflow: visible !important;
-			}
-
-			/* Hide everything not within the preview */
-			#source-staging-area-staging-area,
-			.view-settings,
-			.controls {
-				display: none !important;
-			}
-
-			/* Show only the rendered Paged.js pages */
-			#zoom-modifier {
-				zoom: 1 !important;
-				margin: 0 !important;
-				padding: 0 !important;
-			}
-
-			/* Avoid layout styling from the on-screen preview */
-			.pages-wrapper,
-			.book-view-modifier {
-				display: block !important;
-				width: auto !important;
-				margin: 0 !important;
-				overflow: visible !important;
-				padding: 0;
-			}
-
-			/* Each Paged.js page should print as one sheet */
-			.pagedjs_page {
-				display: block !important;
-				margin: 0 !important;
-				box-shadow: none !important;
-				break-after: page;
-				page-break-after: always;
-			}
-
-			.pagedjs_page:last-child {
-				break-after: auto;
-				page-break-after: auto;
-			}
-		}
-	</style>
-
 	<div id="app">
 
 		<div class="layout" :class="{init}">
@@ -604,6 +385,7 @@
 							@click="displayFull = true"
 							style="width: 50%"
 						>
+							<i v-if="renderingFull" class="material-symbols-outlined spin" style="font-size: 90%;">progress_activity</i>
 							Full
 						</div>
 					</div>
@@ -775,7 +557,7 @@
 									<div style="flex-grow: 1">{{talk.title}}</div>
 									<div style="flex-shrink: 0; width: 160pt">{{talk.author}}</div>
 									<div
-										:id="'pageNumber_'+talk.id"
+										:class="'pageNumber_'+talk.id"
 										style="flex-shrink: 0; width: 20pt; text-align: right;"
 									>--</div>
 								</div>
@@ -829,7 +611,7 @@
 
 
 				<div v-if="renderingFull && displayFull" class="full-render-message absolute-center flex align-items-center justify-content-center gap-2">
-					<i class="material-symbols-outlined spin">progress_activity</i>
+					<div><i class="material-symbols-outlined spin">progress_activity</i></div>
 					Updating the full document may take some time...
 				</div>
 			</div>
@@ -1305,17 +1087,22 @@
 
 				async computePageNumbers(targetId) {
 					this.computingPageNumbers = true;
-					const pages = document.querySelectorAll(`#${targetId} .pagedjs_page`);
-					for (const page of pages) {
-						await new Promise(res => setTimeout(res, 10)); // small wait to release main thread
+					try {
+						const pages = document.querySelectorAll(`#${targetId} .pagedjs_page`);
+						for (const page of pages) {
+							await new Promise(res => setTimeout(res, 10)); // small wait to release main thread
 
-						// update TOC page numbers
-						const talkStart = page.querySelector('.talk-starter');
-						if (talkStart) {
-							const id = talkStart.id;
-							const tocEl = document.querySelector(`#${targetId} .pageNumber_` + id);
-							if (tocEl) tocEl.textContent = page.dataset['pageNumber'];
+							// update TOC page numbers
+							const talkStart = page.querySelector('.talk-starter');
+							if (talkStart) {
+								const id = talkStart.id;
+								const tocEl = document.querySelector(`#${targetId} .pageNumber_` + id);
+								if (tocEl) tocEl.textContent = page.dataset['pageNumber'];
+							}
 						}
+					}
+					catch (e) {
+						this.computePageNumbers = false;
 					}
 				},
 
@@ -1372,6 +1159,236 @@
 			flex-shrink: 0;
 		}
 	</style>
+
+
+
+	<style> /* PAGES */
+		.pages-area .pagedjs_page {
+			--pagedjs-margin-bottom: var(var(--page-margin)) !important;
+			--pagedjs-margin-top: var(var(--page-margin)) !important;
+			--pagedjs-margin-left: var(var(--page-margin)) !important;
+			--pagedjs-margin-right: var(var(--page-margin)) !important;
+		}
+
+		.offscreen {
+			position: fixed;
+			translate: 100vw;
+			user-select: none;
+			opacity: 0;
+			min-height: 100vh;
+			outline: none;
+		}
+
+		/* PREVIEW */
+
+		#source-staging-area {
+		}
+
+		#render-staging-area {
+		}
+
+		.pagedjs_page {
+			background: white;
+			box-shadow: 0 2px 8px #0002;
+			margin: 16px auto;
+		}
+
+
+		.talk-page {
+			page: talks;
+			width: calc(100% - var(--notes-margin-width));
+		}
+
+		/* NOTE MARGINS */
+		.pagedjs_page:nth-of-type(even) .pagedjs_pagebox .talk-page {
+			margin-left: var(--notes-margin-width);
+		}
+
+		/* PRINT PREVIEW */
+		.bookView .book-view-modifier {
+			zoom: 0.5;
+		}
+
+		.bookView .pagedjs_pages {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.bookView .pagedjs_pages::before {
+			content: '';
+		}
+
+
+		/* TABLE OF CONTENTS */
+		.toc-list {
+			display: flex;
+			flex-direction: column;
+			gap: 2pt;
+		}
+
+		.toc-item {
+			display: flex;
+			gap: 10pt;
+		}
+
+		.toc-spacer {
+			flex-grow: 1;
+			border-bottom: 1pt dotted #888;
+		}
+
+		.talk-columns {
+			/* columns: 2; */
+			column-gap: 0.35in;
+		}
+
+		/* NUMBERED TALK SECTIONS */
+		.body-section {
+			position: relative;
+		}
+
+		.body-section::before {
+			content: attr(data-section-number);
+			position: absolute;
+			top: 0;
+			left: 0;
+			padding-right: 0.5rem;
+			translate: -100%;
+			opacity: .5;
+			transform: scale(0.8);
+		}
+
+		/* RICH TEXT NODES */
+
+		.p-text-node .I {
+			font-style: italic;
+		}
+
+		.p-text-node .EM {
+			font-style: italic;
+		}
+
+		.p-text-node .CITE {
+			font-style: italic;
+		}
+
+		.p-text-node .STRONG {
+			font-weight: bold;
+		}
+
+
+		/* DOC ELEMENT STYLES */
+		.doc-talkTitle {
+		}
+
+		.doc-talkAuthor {
+			text-transform: uppercase;
+		}
+
+		.doc-talkAuthorRole {
+		}
+
+		.doc-talkKicker {
+			border-top: 1pt solid #888;
+			border-bottom: 1pt solid #888;
+			padding: 8pt 0;
+		}
+
+		.doc-H2 {
+		}
+
+		.doc-H3 {
+		}
+
+		.doc-paragraph {
+		}
+
+		.doc-poetry {
+		}
+
+		.doc-ul {
+			list-style: disc;
+		    padding-left: 1em;
+		}
+		.doc-ol {
+			list-style: decimal;
+		    padding-left: 1em;
+		}
+
+		.doc-ul li,
+		.doc-ol li {
+			margin: 10pt 0;
+			display: list-item;
+		}
+
+		.hideImages .doc-image {
+			display: none;
+		}
+
+		.footnotes ol {
+			list-style: decimal;
+		    padding-left: 1em;
+			margin: 0;
+			margin-bottom: 5pt;
+		}
+
+		.footnotes li {
+			display: list-item;
+			margin: 5pt 0;
+			font-size: 12pt;
+		}
+
+
+		/* PRINTING */
+		@media print {
+
+			/* Make sure we scroll */
+			body,
+			.layout,
+			.pages-area,
+			.pages-wrapper {
+				overflow: visible !important;
+			}
+
+			/* Hide everything not within the preview */
+			#source-staging-area-staging-area,
+			.view-settings,
+			.controls {
+				display: none !important;
+			}
+
+			/* Show only the rendered Paged.js pages */
+			#zoom-modifier {
+				zoom: 1 !important;
+				margin: 0 !important;
+				padding: 0 !important;
+			}
+
+			/* Avoid layout styling from the on-screen preview */
+			.pages-wrapper,
+			.book-view-modifier {
+				display: block !important;
+				width: auto !important;
+				margin: 0 !important;
+				overflow: visible !important;
+				padding: 0;
+			}
+
+			/* Each Paged.js page should print as one sheet */
+			.pagedjs_page {
+				display: block !important;
+				margin: 0 !important;
+				box-shadow: none !important;
+				break-after: page;
+				page-break-after: always;
+			}
+
+			.pagedjs_page:last-child {
+				break-after: auto;
+				page-break-after: auto;
+			}
+		}
+	</style>
+
 </body>
 
 </html>
